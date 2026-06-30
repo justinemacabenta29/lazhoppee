@@ -1,0 +1,102 @@
+.container-sm {
+  background: #f3f5f2;
+  min-height: 100vh;
+  padding: 16px;
+  max-width: 100% !important;
+}
+
+h2 {
+  font-size: 15px;
+  color: #555;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+h2::before {
+  content: '';
+  display: inline-block;
+  width: 3px;
+  height: 15px;
+  background: #A9B7A6;
+  border-radius: 2px;
+}
+
+mat-card {
+  border-radius: 4px !important;
+  box-shadow: none !important;
+  border: 0.5px solid #d8ddd5 !important;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+mat-list-item {
+  border-bottom: 0.5px solid #f0f2ee !important;
+  padding: 4px 16px !important;
+  height: auto !important;
+  min-height: 56px !important;
+}
+mat-list-item:last-child { border-bottom: none !important; }
+
+[matListItemAvatar] {
+  width: 56px !important;
+  height: 56px !important;
+  object-fit: cover !important;
+  border-radius: 4px !important;
+  margin-right: 12px !important;
+  border: 0.5px solid #d8ddd5 !important;
+}
+
+[matListItemTitle] { font-size: 13px !important; color: #222 !important; font-weight: 400 !important; }
+[matListItemLine] { font-size: 13px !important; color: #3C4A3F !important; }
+
+.price[matListItemTitle] { font-size: 13px !important; color: #888 !important; font-weight: 400 !important; }
+.price[matListItemLine] { font-size: 16px !important; color: #3C4A3F !important; font-weight: 600 !important; }
+
+.qty-control {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: 0.5px solid #A9B7A6;
+  border-radius: 4px;
+  overflow: hidden;
+  padding: 0 4px;
+}
+.qty-control span { font-size: 13px; min-width: 24px; text-align: center; color: #222; }
+.qty-control button { font-size: 16px; color: #555; background: none; border: none; cursor: pointer; padding: 2px 6px; }
+.qty-control button:hover { color: #3C4A3F; }
+
+.text-right {
+  display: flex !important;
+  justify-content: flex-end !important;
+  gap: 8px;
+  padding: 12px 16px !important;
+  min-height: auto !important;
+  border-top: 0.5px solid #f0f2ee !important;
+}
+
+button[mat-flat-button] {
+  background: #fff !important;
+  color: #888 !important;
+  border: 0.5px solid #A9B7A6 !important;
+  border-radius: 2px !important;
+  font-size: 13px !important;
+  height: 36px !important;
+}
+button[mat-flat-button]:hover { color: #3C4A3F !important; border-color: #3C4A3F !important; }
+
+button[mat-raised-button] {
+  background: #3C4A3F !important;
+  color: #fff !important;
+  border-radius: 2px !important;
+  font-size: 13px !important;
+  height: 36px !important;
+  box-shadow: none !important;
+  padding: 0 24px !important;
+}
+button[mat-raised-button]:hover { background: #2c3830 !important; }
+
+.empty-state { text-align: center; padding: 60px 20px; color: #999; }
+.empty-state mat-icon { font-size: 56px; width: 56px; height: 56px; }
+.empty-state p { margin-top: 12px; font-size: 15px; }
+.empty-state a { color: #3C4A3F; font-size: 13px; text-decoration: none; margin-top: 8px; display: inline-block; }

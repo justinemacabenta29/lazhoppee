@@ -1,0 +1,42 @@
+<div class="container-sm">
+  <h2>Cart</h2>
+
+  <!-- Empty state -->
+  <div class="empty-state" *ngIf="cartItem.length === 0">
+    <mat-icon>remove_shopping_cart</mat-icon>
+    <p>Your cart is empty</p>
+    <a href="/products">Shop Now</a>
+  </div>
+
+  <mat-card *ngIf="cartItem.length > 0">
+    <mat-list>
+      <mat-list-item *ngFor="let item of cartItem">
+        <img matListItemAvatar
+             [src]="item.imageUrl"
+             alt="{{item.name}}">
+        <span matListItemTitle>{{item.name}}</span>
+        <span matListItemLine>{{item.price | currency: 'PHP'}}</span>
+        <div class="qty-control" matListItemMeta>
+          <button mat-icon-button (click)="changeQty(item, -1)">−</button>
+          <span>{{ item.qty || 1 }}</span>
+          <button mat-icon-button (click)="changeQty(item, 1)">+</button>
+          <button mat-icon-button (click)="deleteItem(item)">
+            <mat-icon>delete_outline</mat-icon>
+          </button>
+        </div>
+      </mat-list-item>
+
+      <mat-list-item>
+        <span class="price" matListItemTitle>Total PHP</span>
+        <span class="price" matListItemLine>{{totalPrice | currency: 'PHP'}}</span>
+      </mat-list-item>
+
+      <mat-list-item class="text-right">
+        <button mat-flat-button (click)="clearCart()">Clear</button>
+      </mat-list-item>
+      <mat-list-item class="text-right">
+        <button mat-raised-button color="accent" (click)="checout()">Checkout</button>
+      </mat-list-item>
+    </mat-list>
+  </mat-card>
+</div>

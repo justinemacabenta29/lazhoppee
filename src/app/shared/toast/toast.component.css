@@ -1,0 +1,28 @@
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #333;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 4px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 9999;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.3s, transform 0.3s;
+  pointer-events: none;
+}
+.toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+.toast mat-icon {
+  color: #4caf50;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}

@@ -1,13 +1,28 @@
 <mat-toolbar color="primary">
-    <mat-toolbar-row>
-        <a href="/products" mat-button>Products</a>
-        <a href="/cart" mat-button>Cart</a>
-    </mat-toolbar-row>
+  <mat-toolbar-row>
+    <a href="/products" mat-button>Products</a>
+    <a href="/cart" mat-button>
+      Cart
+      <span class="cart-badge" *ngIf="cartCount > 0">{{ cartCount }}</span>
+    </a>
+
+    <span class="spacer"></span>
+
+    <!-- Show when NOT logged in -->
+    <a href="/login" mat-button *ngIf="!isLoggedIn">Login</a>
+    <a href="/signup" mat-button *ngIf="!isLoggedIn">Sign Up</a>
+
+    <!-- Show when logged in -->
+    <span class="welcome-text" *ngIf="isLoggedIn">Hi, {{ currentUserName }}</span>
+    <button mat-button *ngIf="isLoggedIn" (click)="onLogout()">Logout</button>
+  </mat-toolbar-row>
 </mat-toolbar>
 
 <div class="container text-center">
-    <h1>LAZSHOPEE</h1>
-    <h2>SHOP NOW!</h2>
+  <h1>LAZSHOPEE</h1>
+  <h2>SHOP NOW!</h2>
 </div>
+
+<app-toast></app-toast>
 
 <router-outlet></router-outlet>

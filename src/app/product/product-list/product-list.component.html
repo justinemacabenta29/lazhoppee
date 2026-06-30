@@ -1,14 +1,47 @@
 <div class="container">
-    <h3>Just for you</h3>
-    <div fxLayout="row wrap" fxLayoutGap="50px grid">
-        <div *ngFor="let product of products">
-            <mat-card class="product-card" appearance="outlined">
-                <img mat-card-image src="/assets/images/{{product.imageUrl}}">
-                <mat-card-content>
-                    <mat-card-title>{{product.name}}</mat-card-title>
-                    <mat-card-subtitle>{{product.price | currency: 'PHP'}}</mat-card-subtitle>
-                </mat-card-content>
-            </mat-card>
-        </div>
+
+  <!-- Search + Sort bar -->
+  <div class="filter-bar">
+    <div class="search-wrap">
+      <mat-icon>search</mat-icon>
+      <input type="text" [(ngModel)]="searchQuery"
+             (input)="applyFilters()"
+             placeholder="Search shoes...">
     </div>
+    <select [(ngModel)]="sortOrder" (change)="applyFilters()">
+      <option value="">Sort by</option>
+      <option value="asc">Price: Low to High</option>
+      <option value="desc">Price: High to Low</option>
+    </select>
+  </div>
+
+  <h3>Just for you</h3>
+
+  <!-- Empty state -->
+  <div class="empty-state" *ngIf="filteredProducts.length === 0">
+    <mat-icon>search_off</mat-icon>
+    <p>No products found</p>
+  </div>
+
+  <div fxLayout="row wrap" fxLayoutGap="10px grid">
+    <div *ngFor="let product of filteredProducts">
+      <mat-card class="product-card" appearance="outlined"
+                (click)="goToDetail(product._id)">
+        <img mat-card-image [src]="product.imageUrl"
+             alt="{{product.name}}">
+        <mat-card-content>
+          <mat-card-title>{{product.name}}</mat-card-title>
+          <mat-card-subtitle>{{product.price | currency: 'PHP'}}</mat-card-subtitle>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-raised-button color="accent"
+                  (click)="addToCart($event, product)">
+            <mat-icon>add_shopping_cart</mat-icon>
+            Add to Cart
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+
 </div>

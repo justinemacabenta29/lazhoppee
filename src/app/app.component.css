@@ -1,0 +1,87 @@
+/* Toolbar */
+mat-toolbar {
+  background: #3C4A3F !important;
+  height: 50px !important;
+  padding: 0 20px !important;
+}
+
+mat-toolbar a {
+  color: #fff !important;
+  font-size: 13px !important;
+  opacity: 0.9;
+}
+mat-toolbar a:hover {
+  opacity: 1;
+  background: rgba(255,255,255,0.15) !important;
+  border-radius: 2px;
+}
+
+/* Hero section */
+.container {
+  background: #3C4A3F;
+  padding: 24px 20px 20px;
+  margin: 0 !important;
+  max-width: 100% !important;
+  text-align: center;
+}
+.container h1 {
+  color: #fff;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin: 0 0 4px;
+}
+.container h2 {
+  color: rgba(255,255,255,0.8);
+  font-size: 13px;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+/* Cart badge */
+.cart-badge {
+  background: #fff;
+  color: #3C4A3F;
+  border-radius: 50%;
+  font-size: 10px;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 4px;
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #3C4A3F;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 4px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 9999;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.3s, transform 0.3s;
+  pointer-events: none;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+.toast mat-icon { color: #A9B7A6; font-size: 18px; width: 18px; height: 18px; }
+/* (keep your existing styles, just add these) */
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.welcome-text {
+  color: #fff;
+  font-size: 13px;
+  margin-right: 8px;
+}

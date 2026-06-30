@@ -1,0 +1,37 @@
+<div class="detail-wrapper">
+  <div class="detail-card" *ngIf="product">
+
+    <div class="detail-img">
+      <img [src]="product.imageUrl" alt="{{product.name}}">
+    </div>
+
+    <div class="detail-info">
+      <h1 class="detail-name">{{ product.name }}</h1>
+      <div class="detail-price">{{ product.price | currency:'PHP' }}</div>
+      <p class="detail-desc">{{ product.description || 'No description available.' }}</p>
+
+      <div class="detail-meta">
+        <span>Stock: {{ product.stock ?? 'Available' }}</span>
+        <span>Category: {{ product.category ?? 'Shoes' }}</span>
+      </div>
+
+      <button mat-raised-button color="accent"
+              class="add-btn" (click)="addToCart()">
+        <mat-icon>add_shopping_cart</mat-icon>
+        Add to Cart
+      </button>
+
+      <button mat-stroked-button class="back-btn"
+              (click)="goBack()">
+        ← Back to Products
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Loading -->
+  <div class="empty-state" *ngIf="!product">
+    <mat-icon>hourglass_empty</mat-icon>
+    <p>Loading product...</p>
+  </div>
+</div>
