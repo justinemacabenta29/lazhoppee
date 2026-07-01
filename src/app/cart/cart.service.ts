@@ -25,13 +25,16 @@ export class CartService {
   }
 
   addToCart(product: Product): Observable<Product> {
-    return this.http.post<Product>(this.cartUrl, {
-      ...product,
-      imageUrl: product.imageUrl || ''
-    }).pipe(
-      tap(() => this.cartCount$.next(this.cartCount$.value + 1))
-    );
-  }
+  return this.http.post<Product>(this.cartUrl, {
+    productId: product._id,  // ← this was missing!
+    name: product.name,
+    price: product.price,
+    imageUrl: product.imageUrl || '',
+    qty: 1
+  }).pipe(
+    tap(() => this.cartCount$.next(this.cartCount$.value + 1))
+  );
+}
 
   clearCart(): Observable<void> {
     return this.http.delete<void>(this.cartUrl).pipe(

@@ -10,12 +10,18 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CartModule } from './cart/cart.module';
 import { ToastComponent } from './shared/toast/toast.component';
-import { AuthModule } from './auth/auth.module';  // ← add this
+import { AuthModule } from './auth/auth.module';
+import { AdminDashboardComponent } from './roles/admin/admin-dashboard/admin-dashboard.component';
+import { StoreDashboardComponent } from './roles/store-owner/store-dashboard/store-dashboard.component';
+import { CustomerDashboardComponent } from './roles/customer/customer-dashboard/customer-dashboard.component';  // ← add this
 
 @NgModule({
   declarations: [
     AppComponent,
-    ToastComponent
+    ToastComponent,
+    AdminDashboardComponent,
+    StoreDashboardComponent,
+    CustomerDashboardComponent
   ],
   imports: [
     BrowserModule,

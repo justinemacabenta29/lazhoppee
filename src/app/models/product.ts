@@ -4,9 +4,9 @@ export interface Product {
   price: number;
   imageUrl?: string;
   description?: string;
-  category?: string;
+  category?: 'shoes' | 'pants' | 'tshirt' | 'hoodie' | 'accessories' | 'all' | string;
   stock?: number;
   rating?: number;
   sold?: number;
-  qty?: number; 
+  qty?: number;
 }

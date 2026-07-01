@@ -6,16 +6,49 @@
       <mat-icon>search</mat-icon>
       <input type="text" [(ngModel)]="searchQuery"
              (input)="applyFilters()"
-             placeholder="Search shoes...">
+             placeholder="Search products...">
     </div>
     <select [(ngModel)]="sortOrder" (change)="applyFilters()">
       <option value="">Sort by</option>
       <option value="asc">Price: Low to High</option>
       <option value="desc">Price: High to Low</option>
+      <option value="rating">Rating</option>
     </select>
+    
   </div>
 
-  <h3>Just for you</h3>
+  <!-- Category tabs -->
+  <div class="category-tabs">
+    <button [class.active]="selectedCategory === 'all'"
+            (click)="selectCategory('all')">
+      All
+    </button>
+    <button [class.active]="selectedCategory === 'shoes'"
+            (click)="selectCategory('shoes')">
+      👟 Shoes
+    </button>
+    <button [class.active]="selectedCategory === 'pants'"
+            (click)="selectCategory('pants')">
+      👖 Pants
+    </button>
+    <button [class.active]="selectedCategory === 'tshirt'"
+            (click)="selectCategory('tshirt')">
+      👕 T-Shirts
+    </button>
+    <button [class.active]="selectedCategory === 'Hoodie'"
+            (click)="selectCategory('Hoodie')">
+      👕 Hoodies
+    </button>
+    <button [class.active]="selectedCategory === 'accessories'"
+            (click)="selectCategory('accessories')">
+      👜 Accessories
+    </button>
+  </div>
+
+  <h3>
+    {{ selectedCategory === 'all' ? 'Just for you' : selectedCategory === 'tshirt' ? 'T-Shirts' : selectedCategory | titlecase }}
+    <span class="product-count">({{ filteredProducts.length }})</span>
+  </h3>
 
   <!-- Empty state -->
   <div class="empty-state" *ngIf="filteredProducts.length === 0">
@@ -32,6 +65,7 @@
         <mat-card-content>
           <mat-card-title>{{product.name}}</mat-card-title>
           <mat-card-subtitle>{{product.price | currency: 'PHP'}}</mat-card-subtitle>
+          <span class="category-tag">{{ product.category }}</span>
         </mat-card-content>
         <mat-card-actions>
           <button mat-raised-button color="accent"

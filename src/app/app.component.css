@@ -9,6 +9,7 @@ mat-toolbar a {
   color: #fff !important;
   font-size: 13px !important;
   opacity: 0.9;
+  text-decoration: none;
 }
 mat-toolbar a:hover {
   opacity: 1;
@@ -38,6 +39,9 @@ mat-toolbar a:hover {
   margin: 0;
 }
 
+/* Spacer */
+.spacer { flex: 1 1 auto; }
+
 /* Cart badge */
 .cart-badge {
   background: #fff;
@@ -51,6 +55,50 @@ mat-toolbar a:hover {
   align-items: center;
   justify-content: center;
   margin-left: 4px;
+}
+
+/* Admin login button */
+.admin-btn {
+  color: #fff !important;
+  font-size: 12px !important;
+  border: 1px solid rgba(255,255,255,0.4) !important;
+  border-radius: 2px !important;
+  margin-left: 8px !important;
+  opacity: 0.85;
+}
+.admin-btn:hover {
+  background: rgba(255,255,255,0.15) !important;
+  opacity: 1;
+}
+
+/* Welcome text */
+.welcome-text {
+  color: #fff;
+  font-size: 13px;
+  margin-right: 8px;
+}
+
+/* Role badge */
+.role-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-right: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.role-badge.admin {
+  background: #fff3cd;
+  color: #7a6000;
+}
+.role-badge.store_owner {
+  background: #d4edda;
+  color: #155724;
+}
+.role-badge.customer {
+  background: #cce5ff;
+  color: #004085;
 }
 
 /* Toast */
@@ -73,15 +121,9 @@ mat-toolbar a:hover {
   pointer-events: none;
 }
 .toast.show { opacity: 1; transform: translateY(0); }
-.toast mat-icon { color: #A9B7A6; font-size: 18px; width: 18px; height: 18px; }
-/* (keep your existing styles, just add these) */
-
-.spacer {
-  flex: 1 1 auto;
-}
-
-.welcome-text {
-  color: #fff;
-  font-size: 13px;
-  margin-right: 8px;
+.toast mat-icon {
+  color: #A9B7A6;
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
 }

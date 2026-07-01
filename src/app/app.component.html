@@ -9,12 +9,22 @@
     <span class="spacer"></span>
 
     <!-- Show when NOT logged in -->
-    <a href="/login" mat-button *ngIf="!isLoggedIn">Login</a>
-    <a href="/signup" mat-button *ngIf="!isLoggedIn">Sign Up</a>
+    <ng-container *ngIf="!isLoggedIn">
+      <a href="/login" mat-button>Login</a>
+      <a href="/signup" mat-button>Sign Up</a>
+      <button class="admin-btn" mat-button (click)="onAdminLogin()">
+        Admin Login
+      </button>
+    </ng-container>
 
     <!-- Show when logged in -->
-    <span class="welcome-text" *ngIf="isLoggedIn">Hi, {{ currentUserName }}</span>
-    <button mat-button *ngIf="isLoggedIn" (click)="onLogout()">Logout</button>
+    <ng-container *ngIf="isLoggedIn">
+      <span class="role-badge" [ngClass]="currentUserRole">
+        {{ currentUserRole === 'store_owner' ? 'Store Owner' : currentUserRole === 'admin' ? 'Admin' : 'Customer' }}
+      </span>
+      <span class="welcome-text">Hi, {{ currentUserName }}</span>
+      <button mat-button (click)="onLogout()">Logout</button>
+    </ng-container>
   </mat-toolbar-row>
 </mat-toolbar>
 

@@ -18,6 +18,11 @@ export class SignupComponent {
   constructor(private authService: AuthService, private router: Router) {}
 
   onSignup(): void {
+    if (!this.name || !this.email || !this.password) {
+      this.errorMsg = 'Please fill in all fields.';
+      return;
+    }
+
     this.authService.signup({
       name: this.name,
       email: this.email,
@@ -25,11 +30,13 @@ export class SignupComponent {
       role: this.role as any
     }).subscribe({
       next: () => {
-        this.successMsg = 'Account created! Please login.';
-        setTimeout(() => this.router.navigate(['/login']), 1500);
+        this.successMsg = this.role === 'store_owner'
+          ? 'Account created! Waiting for admin approval.'
+          : 'Account created! Please login.';
+        setTimeout(() => this.router.navigate(['/login']), 2000);
       },
       error: (err) => {
-        this.errorMsg = err.error?.error || 'Signup failed';
+        this.errorMsg = err.error?.error || 'Signup failed. Email may already be in use.';
       }
     });
   }

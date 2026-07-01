@@ -15,6 +15,7 @@ export class ProductListComponent implements OnInit {
   filteredProducts: Product[] = [];
   searchQuery: string = '';
   sortOrder: string = '';
+  selectedCategory: string = 'all';
 
   constructor(
     private productService: ProductService,
@@ -24,14 +25,28 @@ export class ProductListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loadProducts();
+  }
+
+  loadProducts(): void {
     this.productService.getProducts().subscribe(data => {
       this.products = data;
-      this.filteredProducts = data;
+      this.applyFilters();
     });
+  }
+
+  selectCategory(category: string): void {
+    this.selectedCategory = category;
+    this.applyFilters();
   }
 
   applyFilters(): void {
     let result = [...this.products];
+
+    // category filter
+    if (this.selectedCategory !== 'all') {
+      result = result.filter(p => p.category === this.selectedCategory);
+    }
 
     // search filter
     if (this.searchQuery.trim()) {
@@ -51,7 +66,7 @@ export class ProductListComponent implements OnInit {
   }
 
   addToCart(event: Event, product: Product): void {
-    event.stopPropagation(); // prevent navigating to detail
+    event.stopPropagation();
     this.cartService.addToCart(product).subscribe(() => {
       this.toastService.show(`"${product.name}" added to cart!`);
     });

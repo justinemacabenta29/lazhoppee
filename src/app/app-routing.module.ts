@@ -5,8 +5,9 @@ import { CartListComponent } from './cart/cart-list/cart-list.component';
 import { ProductDetailComponent } from './product/product-detail/product-detail.component';
 import { LoginComponent } from './auth/login/login.component';
 import { SignupComponent } from './auth/signup/signup.component';
-import { AuthGuard } from './auth/auth.guard';
-import { RoleGuard } from './auth/role.guard';
+import { AdminDashboardComponent } from './roles/admin/admin-dashboard/admin-dashboard.component';
+import { StoreDashboardComponent } from './roles/store-owner/store-dashboard/store-dashboard.component';
+import { CustomerDashboardComponent } from './roles/customer/customer-dashboard/customer-dashboard.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/products', pathMatch: 'full' },
@@ -14,8 +15,10 @@ const routes: Routes = [
   { path: 'signup', component: SignupComponent },
   { path: 'products', component: ProductListComponent },
   { path: 'products/:id', component: ProductDetailComponent },
-  
-  // we'll add admin/store routes after creating those modules
+  { path: 'cart', component: CartListComponent },
+  { path: 'admin', component: AdminDashboardComponent },
+  { path: 'store', component: StoreDashboardComponent },
+  { path: 'customer', component: CustomerDashboardComponent },
 ];
 
 @NgModule({

@@ -12,6 +12,7 @@ export class AppComponent implements OnInit {
   cartCount: number = 0;
   isLoggedIn: boolean = false;
   currentUserName: string = '';
+  currentUserRole: string = '';
 
   constructor(
     private cartService: CartService,
@@ -23,7 +24,6 @@ export class AppComponent implements OnInit {
     this.cartService.cartCount$.subscribe(count => {
       this.cartCount = count;
     });
-
     this.checkLoginStatus();
   }
 
@@ -31,11 +31,30 @@ export class AppComponent implements OnInit {
     const user = this.authService.getCurrentUser();
     this.isLoggedIn = !!user;
     this.currentUserName = user?.name || '';
+    this.currentUserRole = user?.role || '';
+  }
+
+  onAdminLogin(): void {
+    this.authService.login('justine@gmail.com', 'justine123').subscribe({
+      next: (user) => {
+        if (user.role === 'admin') {
+          this.checkLoginStatus();
+          this.router.navigate(['/admin']);
+        } else {
+          alert('This account is not an admin.');
+        }
+      },
+      error: () => {
+        alert('Admin login failed. Please check your credentials in MongoDB.');
+      }
+    });
   }
 
   onLogout(): void {
     this.authService.logout();
     this.isLoggedIn = false;
+    this.currentUserName = '';
+    this.currentUserRole = '';
     this.router.navigate(['/products']);
   }
 }

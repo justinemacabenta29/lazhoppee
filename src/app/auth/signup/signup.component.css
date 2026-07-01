@@ -6,20 +6,68 @@
   justify-content: center;
   padding: 20px;
 }
+
 .auth-card {
   background: #fff;
   border-radius: 4px;
   padding: 32px;
   width: 100%;
-  max-width: 360px;
+  max-width: 380px;
   border: 0.5px solid #d8ddd5;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
 }
-.auth-card h2 {
-  font-size: 18px;
-  color: #3C4A3F;
-  margin-bottom: 20px;
+
+/* Brand header */
+.brand {
   text-align: center;
+  margin-bottom: 24px;
 }
+.brand h1 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #3C4A3F;
+  letter-spacing: 1px;
+  margin: 0 0 4px;
+}
+.brand p {
+  font-size: 12px;
+  color: #888;
+  margin: 0;
+}
+
+/* Role tabs */
+.role-tabs {
+  display: flex;
+  border: 1px solid #d8ddd5;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+.role-tabs button {
+  flex: 1;
+  padding: 8px 0;
+  border: none;
+  background: #f3f5f2;
+  color: #888;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+  border-right: 1px solid #d8ddd5;
+}
+.role-tabs button:last-child {
+  border-right: none;
+}
+.role-tabs button.active {
+  background: #3C4A3F;
+  color: #fff;
+  font-weight: 500;
+}
+.role-tabs button:hover:not(.active) {
+  background: #e8ede5;
+  color: #3C4A3F;
+}
+
+/* Form groups */
 .form-group {
   margin-bottom: 14px;
 }
@@ -29,36 +77,59 @@
   color: #555;
   margin-bottom: 4px;
 }
-.form-group input,
-.form-group select {
+.form-group input {
   width: 100%;
   padding: 8px 10px;
   border: 1px solid #A9B7A6;
   border-radius: 2px;
   font-size: 13px;
   outline: none;
+  box-sizing: border-box;
 }
-.form-group input:focus,
-.form-group select:focus {
+.form-group input:focus {
   border-color: #3C4A3F;
 }
+
+/* Store owner notice */
+.notice {
+  background: #fff8e1;
+  border: 1px solid #ffe082;
+  border-radius: 2px;
+  padding: 8px 10px;
+  font-size: 12px;
+  color: #7a6000;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+/* Sign up button */
 button[mat-raised-button] {
   width: 100%;
   background: #3C4A3F !important;
   color: #fff !important;
   height: 40px !important;
   margin-top: 8px;
+  border-radius: 2px !important;
+  font-size: 13px !important;
 }
+button[mat-raised-button]:hover {
+  background: #2c3830 !important;
+}
+
 .error {
   color: #d32f2f;
   font-size: 12px;
   margin-bottom: 8px;
+  text-align: center;
 }
+
 .success {
   color: #388e3c;
   font-size: 12px;
   margin-bottom: 8px;
+  text-align: center;
 }
+
 .switch-link {
   text-align: center;
   font-size: 12px;
@@ -68,4 +139,5 @@ button[mat-raised-button] {
 .switch-link a {
   color: #3C4A3F;
   text-decoration: none;
+  font-weight: 500;
 }
