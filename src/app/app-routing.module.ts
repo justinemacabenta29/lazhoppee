@@ -8,6 +8,9 @@ import { SignupComponent } from './auth/signup/signup.component';
 import { AdminDashboardComponent } from './roles/admin/admin-dashboard/admin-dashboard.component';
 import { StoreDashboardComponent } from './roles/store-owner/store-dashboard/store-dashboard.component';
 import { CustomerDashboardComponent } from './roles/customer/customer-dashboard/customer-dashboard.component';
+import { AdminGuard } from './auth/admin.guard';
+import { AdminLoginComponent } from './auth/admin-login/admin-login.component';
+
 
 const routes: Routes = [
   { path: '', redirectTo: '/products', pathMatch: 'full' },
@@ -16,9 +19,12 @@ const routes: Routes = [
   { path: 'products', component: ProductListComponent },
   { path: 'products/:id', component: ProductDetailComponent },
   { path: 'cart', component: CartListComponent },
-  { path: 'admin', component: AdminDashboardComponent },
+  { path: 'admin', component: AdminDashboardComponent, canActivate: [AdminGuard] },
   { path: 'store', component: StoreDashboardComponent },
   { path: 'customer', component: CustomerDashboardComponent },
+  { path: 'admin-login', component: AdminLoginComponent },
+  { path: 'admin', component: AdminDashboardComponent, canActivate: [AdminGuard] },
+  
 ];
 
 @NgModule({

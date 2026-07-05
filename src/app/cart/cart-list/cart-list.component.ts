@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Product } from 'src/app/models/product';
 import { CartService } from '../cart.service';
+import { OrderService } from 'src/app/shared/order.service';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-cart-list',
@@ -11,8 +14,15 @@ export class CartListComponent implements OnInit {
 
   totalPrice: number = 0;
   cartItem: Product[] = [];
+  placingOrder: boolean = false;
+  checkoutError: string = '';
 
-  constructor(private cartService: CartService) {}
+  constructor(
+    private cartService: CartService,
+    private orderService: OrderService,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.cartService.getCartItem().subscribe(data => {
@@ -24,7 +34,7 @@ export class CartListComponent implements OnInit {
   getTotalPrice(): number {
     let total = 0;
     for (let item of this.cartItem) {
-      total += item.price * ((item as any).qty || 1); // ← multiply by qty
+      total += item.price * ((item as any).qty || 1);
     }
     return total;
   }
@@ -33,23 +43,57 @@ export class CartListComponent implements OnInit {
     const newQty = Math.max(1, (item.qty || 1) + delta);
     item.qty = newQty;
     this.totalPrice = this.getTotalPrice();
-    // uncomment when backend is ready:
-    // this.cartService.updateQty(item._id, newQty).subscribe();
   }
 
   clearCart(): void {
     this.cartService.clearCart().subscribe(() => {
       this.cartItem = [];
-      this.totalPrice = 0; // ← set directly to 0, no need to call getTotalPrice
+      this.totalPrice = 0;
     });
   }
 
-  // ✅ FIXED — was calling non-existent checkout() from service
-  checout(): void {
-    alert('Checkout coming soon!');
+  checkout(): void {
+    const user = this.authService.getCurrentUser();
+    if (!user) {
+      this.checkoutError = 'Please login to checkout.';
+      this.router.navigate(['/login']);
+      return;
+    }
+    if (this.cartItem.length === 0) {
+      this.checkoutError = 'Your cart is empty.';
+      return;
+    }
+
+    this.checkoutError = '';
+    this.placingOrder = true;
+
+    const orderPayload = {
+      customer: user._id,
+      items: this.cartItem.map((item: any) => ({
+        productId: item._id,
+        name: item.name,
+        price: item.price,
+        qty: item.qty || 1,
+        imageUrl: item.imageUrl || ''
+      })),
+      totalPrice: this.totalPrice,
+      placed: false // draft — customer will review before placing
+    };
+
+    this.orderService.create(orderPayload).subscribe({
+      next: () => {
+        this.cartService.clearCart().subscribe(() => {
+          this.placingOrder = false;
+          this.router.navigate(['/customer'], { queryParams: { tab: 'purchases' } });
+        });
+      },
+      error: () => {
+        this.placingOrder = false;
+        this.checkoutError = 'Failed to checkout. Please try again.';
+      }
+    });
   }
 
-  // ✅ FIXED — was calling non-existent checkout() from service
   deleteItem(item: any): void {
     this.cartService.deleteItem(item._id).subscribe(() => {
       this.cartItem = this.cartItem.filter(i => (i as any)._id !== item._id);

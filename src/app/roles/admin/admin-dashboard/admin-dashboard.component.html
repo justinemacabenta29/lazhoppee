@@ -1,1 +1,164 @@
-<p>admin-dashboard works!</p>
+<div class="admin-wrapper">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-brand">
+        <h2>LAZSHOPEE</h2>
+        <span>Admin Panel</span>
+      </div>
+      <nav>
+        <button [class.active]="activeTab === 'stores'"
+                (click)="activeTab = 'stores'">
+          🏪 Store Approvals
+        </button>
+        <button [class.active]="activeTab === 'users'"
+                (click)="activeTab = 'users'">
+          👥 User Accounts
+        </button>
+      </nav>
+    </div>
+  
+    <!-- Main content -->
+    <div class="main-content">
+  
+      <!-- Top header bar -->
+      <div class="admin-topbar">
+        <h2>LAZSHOPEE <span>Admin</span></h2>
+        <button class="logout-btn" (click)="onLogout()">Logout</button>
+      </div>
+  
+      <!-- ── STORE APPROVALS ── -->
+      <div *ngIf="activeTab === 'stores'">
+        <div class="page-header">
+          <h1>Store Approvals</h1>
+          <span class="badge">{{ stores.length }} stores</span>
+        </div>
+  
+        <div class="empty-state" *ngIf="stores.length === 0">
+          <p>No stores found.</p>
+        </div>
+  
+        <div class="table-wrap" *ngIf="stores.length > 0">
+          <table>
+            <thead>
+              <tr>
+                <th>Store Name</th>
+                <th>Owner</th>
+                <th>Status</th>
+                <th>Category</th>
+                <th>Assign Category</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let store of stores">
+                <td>
+                  <strong>{{ store.name }}</strong>
+                  <p class="sub">{{ store.description }}</p>
+                </td>
+                <td>{{ store.owner?.name || 'Unknown' }}</td>
+                <td>
+                  <span class="status-badge"
+                        [ngClass]="store.approved ? 'approved' : 'pending'">
+                    {{ store.approved ? 'Approved' : 'Pending' }}
+                  </span>
+                </td>
+                <td>
+                  <span *ngIf="store.categories && store.categories.length > 0">
+                    {{ store.categories.join(', ') | titlecase }}
+                  </span>
+                  <span *ngIf="!store.categories || store.categories.length === 0">—</span>
+                </td>
+                <td>
+                  <div class="category-checklist">
+                    <label *ngFor="let cat of categories" class="checkbox-label">
+                      <input type="checkbox"
+                             [checked]="isCategoryChecked(store._id!, cat)"
+                             (change)="toggleCategory(store._id!, cat, $any($event.target).checked)">
+                      {{ cat | titlecase }}
+                    </label>
+                  </div>
+                </td>
+                <td class="actions">
+                  <button class="btn-approve"
+                          (click)="approveStore(store)"
+                          *ngIf="!store.approved">
+                    ✅ Approve
+                  </button>
+                  <button class="btn-reject"
+                          (click)="rejectStore(store._id!)"
+                          *ngIf="store.approved">
+                    ❌ Reject
+                  </button>
+                  <button class="btn-delete"
+                          (click)="deleteStore(store._id!)">
+                    🗑 Delete
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+  
+      <!-- ── USER ACCOUNTS ── -->
+      <div *ngIf="activeTab === 'users'">
+        <div class="page-header">
+          <h1>User Accounts</h1>
+          <span class="badge">{{ users.length }} users</span>
+        </div>
+  
+        <div class="empty-state" *ngIf="users.length === 0">
+          <p>No users found.</p>
+        </div>
+  
+        <div class="table-wrap" *ngIf="users.length > 0">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let user of users">
+                <td><strong>{{ user.name }}</strong></td>
+                <td>{{ user.email }}</td>
+                <td>
+                  <span class="role-badge" [ngClass]="user.role">
+                    {{ user.role === 'store_owner' ? 'Store Owner' : 'Customer' }}
+                  </span>
+                </td>
+                <td>
+                  <span class="status-badge"
+                        [ngClass]="user.active ? 'approved' : 'pending'">
+                    {{ user.active ? 'Active' : 'Inactive' }}
+                  </span>
+                </td>
+                <td class="actions">
+                  <button class="btn-approve"
+                          (click)="approveUser(user._id)"
+                          *ngIf="!user.active">
+                    ✅ Activate
+                  </button>
+                  <button class="btn-reject"
+                          (click)="deactivateUser(user._id)"
+                          *ngIf="user.active">
+                    🚫 Deactivate
+                  </button>
+                  <button class="btn-delete"
+                          (click)="deleteUser(user._id)">
+                    🗑 Delete
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+  
+    </div>
+  </div>

@@ -20,29 +20,17 @@
   <!-- Category tabs -->
   <div class="category-tabs">
     <button [class.active]="selectedCategory === 'all'"
-            (click)="selectCategory('all')">
-      All
-    </button>
+            (click)="selectCategory('all')">All</button>
     <button [class.active]="selectedCategory === 'shoes'"
-            (click)="selectCategory('shoes')">
-      👟 Shoes
-    </button>
+            (click)="selectCategory('shoes')">👟 Shoes</button>
     <button [class.active]="selectedCategory === 'pants'"
-            (click)="selectCategory('pants')">
-      👖 Pants
-    </button>
+            (click)="selectCategory('pants')">👖 Pants</button>
     <button [class.active]="selectedCategory === 'tshirt'"
-            (click)="selectCategory('tshirt')">
-      👕 T-Shirts
-    </button>
-    <button [class.active]="selectedCategory === 'Hoodie'"
-            (click)="selectCategory('Hoodie')">
-      👕 Hoodies
-    </button>
+            (click)="selectCategory('tshirt')">👕 T-Shirts</button>
+    <button [class.active]="selectedCategory === 'hoodie'"
+            (click)="selectCategory('hoodie')">🧥 Hoodies</button>
     <button [class.active]="selectedCategory === 'accessories'"
-            (click)="selectCategory('accessories')">
-      👜 Accessories
-    </button>
+            (click)="selectCategory('accessories')">👜 Accessories</button>
   </div>
 
   <h3>
@@ -72,6 +60,12 @@
                   (click)="addToCart($event, product)">
             <mat-icon>add_shopping_cart</mat-icon>
             Add to Cart
+          </button>
+          <button mat-stroked-button
+                  *ngIf="getOwnerId(product)"
+                  (click)="messageSeller($event, product)">
+            <mat-icon>chat</mat-icon>
+            Message Seller
           </button>
         </mat-card-actions>
       </mat-card>

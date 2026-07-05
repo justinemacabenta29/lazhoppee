@@ -9,4 +9,6 @@ export interface Product {
   rating?: number;
   sold?: number;
   qty?: number;
+  store?: string | { _id: string; name: string; owner?: { _id: string; name: string } };
+  approved?: boolean;
 }

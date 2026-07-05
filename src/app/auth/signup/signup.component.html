@@ -16,21 +16,25 @@
               (click)="role = 'store_owner'">
         Store Owner
       </button>
+      <button [class.active]="role === 'admin'"
+              (click)="role = 'admin'">
+        Admin
+      </button>
     </div>
 
     <div class="form-group">
       <label>Full Name</label>
-      <input type="text" [(ngModel)]="name" placeholder="Juan Dela Cruz">
+      <input type="text" [(ngModel)]="name" placeholder="Full Name">
     </div>
 
     <div class="form-group">
       <label>Email</label>
-      <input type="email" [(ngModel)]="email" placeholder="you@example.com">
+      <input type="email" [(ngModel)]="email" placeholder="Email">
     </div>
 
     <div class="form-group">
       <label>Password</label>
-      <input type="password" [(ngModel)]="password" placeholder="••••••••">
+      <input type="password" [(ngModel)]="password" placeholder="Password">
     </div>
 
     <!-- Store owner notice -->
@@ -42,7 +46,7 @@
     <p class="success" *ngIf="successMsg">{{ successMsg }}</p>
 
     <button mat-raised-button (click)="onSignup()">
-      Sign Up as {{ role === 'store_owner' ? 'Store Owner' : 'Customer' }}
+      Sign Up as {{ role === 'store_owner' ? 'Store Owner' : role === 'admin' ? 'Admin' : 'Customer' }}
     </button>
 
     <p class="switch-link">Already have an account? <a routerLink="/login">Login</a></p>

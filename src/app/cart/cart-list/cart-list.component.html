@@ -35,7 +35,12 @@
         <button mat-flat-button (click)="clearCart()">Clear</button>
       </mat-list-item>
       <mat-list-item class="text-right">
-        <button mat-raised-button color="accent" (click)="checout()">Checkout</button>
+        <button mat-raised-button color="accent" (click)="checkout()" [disabled]="placingOrder">
+          {{ placingOrder ? 'Placing Order...' : 'Checkout' }}
+        </button>
+      </mat-list-item>
+      <mat-list-item *ngIf="checkoutError" class="text-right">
+        <p class="error">{{ checkoutError }}</p>
       </mat-list-item>
     </mat-list>
   </mat-card>

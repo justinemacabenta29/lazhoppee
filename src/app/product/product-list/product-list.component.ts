@@ -4,6 +4,7 @@ import { Product } from 'src/app/models/product';
 import { CartService } from 'src/app/cart/cart.service';
 import { ProductService } from '../product.service';
 import { ToastService } from 'src/app/shared/toast/toast.service';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-product-list',
@@ -21,6 +22,7 @@ export class ProductListComponent implements OnInit {
     private productService: ProductService,
     private cartService: CartService,
     private toastService: ToastService,
+    private authService: AuthService,
     private router: Router
   ) {}
 
@@ -43,19 +45,16 @@ export class ProductListComponent implements OnInit {
   applyFilters(): void {
     let result = [...this.products];
 
-    // category filter
     if (this.selectedCategory !== 'all') {
       result = result.filter(p => p.category === this.selectedCategory);
     }
 
-    // search filter
     if (this.searchQuery.trim()) {
       result = result.filter(p =>
         p.name.toLowerCase().includes(this.searchQuery.toLowerCase())
       );
     }
 
-    // sort
     if (this.sortOrder === 'asc') {
       result.sort((a, b) => a.price - b.price);
     } else if (this.sortOrder === 'desc') {
@@ -69,6 +68,34 @@ export class ProductListComponent implements OnInit {
     event.stopPropagation();
     this.cartService.addToCart(product).subscribe(() => {
       this.toastService.show(`"${product.name}" added to cart!`);
+    });
+  }
+
+  getOwnerId(product: Product): string | null {
+    if (product.store && typeof product.store === 'object' && product.store.owner) {
+      return product.store.owner._id;
+    }
+    return null;
+  }
+
+  messageSeller(event: Event, product: Product): void {
+    event.stopPropagation();
+
+    const user = this.authService.getCurrentUser();
+    if (!user) {
+      this.toastService.show('Please login to message the seller.');
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    const ownerId = this.getOwnerId(product);
+    if (!ownerId) {
+      this.toastService.show('Seller info unavailable for this product.');
+      return;
+    }
+
+    this.router.navigate(['/customer'], {
+      queryParams: { tab: 'messages', with: ownerId }
     });
   }
 

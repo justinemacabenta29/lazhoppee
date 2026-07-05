@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 import { CartService } from './cart/cart.service';
 import { AuthService } from './auth/auth.service';
 
@@ -13,6 +14,7 @@ export class AppComponent implements OnInit {
   isLoggedIn: boolean = false;
   currentUserName: string = '';
   currentUserRole: string = '';
+  hideMainToolbar: boolean = false;
 
   constructor(
     private cartService: CartService,
@@ -25,6 +27,18 @@ export class AppComponent implements OnInit {
       this.cartCount = count;
     });
     this.checkLoginStatus();
+    this.updateToolbarVisibility(this.router.url);
+
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: any) => {
+        this.updateToolbarVisibility(event.urlAfterRedirects);
+        this.checkLoginStatus();
+      });
+  }
+
+  updateToolbarVisibility(url: string): void {
+    this.hideMainToolbar = url.startsWith('/admin') || url.startsWith('/store') || url.startsWith('/customer');
   }
 
   checkLoginStatus(): void {
@@ -34,27 +48,19 @@ export class AppComponent implements OnInit {
     this.currentUserRole = user?.role || '';
   }
 
-  onAdminLogin(): void {
-    this.authService.login('justine@gmail.com', 'justine123').subscribe({
-      next: (user) => {
-        if (user.role === 'admin') {
-          this.checkLoginStatus();
-          this.router.navigate(['/admin']);
-        } else {
-          alert('This account is not an admin.');
-        }
-      },
-      error: () => {
-        alert('Admin login failed. Please check your credentials in MongoDB.');
-      }
-    });
+  goToDashboard(): void {
+    if (this.currentUserRole === 'store_owner') {
+      this.router.navigate(['/store']);
+    } else if (this.currentUserRole === 'admin') {
+      this.router.navigate(['/admin']);
+    } else {
+      this.router.navigate(['/customer']);
+    }
   }
 
   onLogout(): void {
     this.authService.logout();
-    this.isLoggedIn = false;
-    this.currentUserName = '';
-    this.currentUserRole = '';
+    this.checkLoginStatus();
     this.router.navigate(['/products']);
   }
 }

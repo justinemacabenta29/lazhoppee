@@ -1,34 +1,29 @@
-<mat-toolbar color="primary">
+<mat-toolbar color="primary" *ngIf="!hideMainToolbar">
   <mat-toolbar-row>
     <a href="/products" mat-button>Products</a>
-    <a href="/cart" mat-button>
+    <a href="/cart" mat-button *ngIf="currentUserRole !== 'store_owner'">
       Cart
       <span class="cart-badge" *ngIf="cartCount > 0">{{ cartCount }}</span>
     </a>
 
     <span class="spacer"></span>
 
-    <!-- Show when NOT logged in -->
     <ng-container *ngIf="!isLoggedIn">
       <a href="/login" mat-button>Login</a>
       <a href="/signup" mat-button>Sign Up</a>
-      <button class="admin-btn" mat-button (click)="onAdminLogin()">
-        Admin Login
-      </button>
+      <a href="/admin-login" mat-button class="admin-btn">Admin Login</a>
     </ng-container>
 
-    <!-- Show when logged in -->
     <ng-container *ngIf="isLoggedIn">
-      <span class="role-badge" [ngClass]="currentUserRole">
+      <span class="role-badge" [ngClass]="currentUserRole" (click)="goToDashboard()" style="cursor: pointer;">
         {{ currentUserRole === 'store_owner' ? 'Store Owner' : currentUserRole === 'admin' ? 'Admin' : 'Customer' }}
       </span>
-      <span class="welcome-text">Hi, {{ currentUserName }}</span>
       <button mat-button (click)="onLogout()">Logout</button>
     </ng-container>
   </mat-toolbar-row>
 </mat-toolbar>
 
-<div class="container text-center">
+<div class="container text-center" *ngIf="!hideMainToolbar">
   <h1>LAZSHOPEE</h1>
   <h2>SHOP NOW!</h2>
 </div>

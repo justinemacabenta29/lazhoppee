@@ -30,10 +30,16 @@ export class SignupComponent {
       role: this.role as any
     }).subscribe({
       next: () => {
-        this.successMsg = this.role === 'store_owner'
-          ? 'Account created! Waiting for admin approval.'
-          : 'Account created! Please login.';
-        setTimeout(() => this.router.navigate(['/login']), 2000);
+        if (this.role === 'admin') {
+          this.successMsg = 'Admin account created! Redirecting to Admin Login...';
+          setTimeout(() => this.router.navigate(['/admin-login']), 2000);
+        } else if (this.role === 'store_owner') {
+          this.successMsg = 'Account created! Waiting for admin approval.';
+          setTimeout(() => this.router.navigate(['/login']), 2000);
+        } else {
+          this.successMsg = 'Account created! Please login.';
+          setTimeout(() => this.router.navigate(['/login']), 2000);
+        }
       },
       error: (err) => {
         this.errorMsg = err.error?.error || 'Signup failed. Email may already be in use.';

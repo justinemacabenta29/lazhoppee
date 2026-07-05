@@ -13,7 +13,8 @@ import { ToastComponent } from './shared/toast/toast.component';
 import { AuthModule } from './auth/auth.module';
 import { AdminDashboardComponent } from './roles/admin/admin-dashboard/admin-dashboard.component';
 import { StoreDashboardComponent } from './roles/store-owner/store-dashboard/store-dashboard.component';
-import { CustomerDashboardComponent } from './roles/customer/customer-dashboard/customer-dashboard.component';  // ← add this
+import { CustomerDashboardComponent } from './roles/customer/customer-dashboard/customer-dashboard.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { CustomerDashboardComponent } from './roles/customer/customer-dashboard/
     ToastComponent,
     AdminDashboardComponent,
     StoreDashboardComponent,
-    CustomerDashboardComponent
+    CustomerDashboardComponent,
+  
   ],
   imports: [
     BrowserModule,
@@ -33,7 +35,8 @@ import { CustomerDashboardComponent } from './roles/customer/customer-dashboard/
     MatButtonModule,
     MatIconModule,
     CartModule,
-    AuthModule  // ← add this
+    AuthModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

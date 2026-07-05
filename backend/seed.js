@@ -38,9 +38,9 @@ mongoose.connect(process.env.MONGODB_URI)
 
       // ── HOODIES ────────────────────────────────────────────
       { name: 'Pullover Hoodie',     price: 1499, category: 'hoodie', stock: 25, rating: 4.6, sold: 140, imageUrl: 'https://images.unsplash.com/photo-1556821840-3a63f95609a7?w=400' },
-      { name: 'Zip-Up Hoodie',       price: 1699, category: 'hoodie', stock: 20, rating: 4.5, sold: 95,  imageUrl: 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=400' },
-      { name: 'Oversized Hoodie',    price: 1899, category: 'hoodie', stock: 18, rating: 4.7, sold: 160, imageUrl: 'https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=400' },
-      { name: 'Fleece-Lined Hoodie', price: 2199, category: 'hoodie', stock: 12, rating: 4.8, sold: 70,  imageUrl: 'https://images.unsplash.com/photo-1509942774463-acf339cf87d5?w=400' },
+      { name: 'Zip-Up Hoodie',       price: 1699, category: 'hoodie', stock: 20, rating: 4.5, sold: 95,  imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRb0erqCTWoGrpWSA3_YgmxUumScBsfpZMdlhzi7NooUg&s=10' },
+      { name: 'Oversized Hoodie',    price: 1899, category: 'hoodie', stock: 18, rating: 4.7, sold: 160, imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjzZfi0P05bpIAdKTl_U2V8v9s9Bz0-jXLD66LaEskSg&s=10' },
+      { name: 'Fleece-Lined Hoodie', price: 2199, category: 'hoodie', stock: 12, rating: 4.8, sold: 70,  imageUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-3_hy9pcp-9ITBZTIz5v0sKKPmfLyItqnnpm_tfX7gw&s=10' },
 
       // ── ACCESSORIES ────────────────────────────────────────
       { name: 'Leather Wallet',  price: 899, category: 'accessories', stock: 30, rating: 4.7, sold: 180, imageUrl: 'https://images.unsplash.com/photo-1627123424574-724758594e93?w=400' },
