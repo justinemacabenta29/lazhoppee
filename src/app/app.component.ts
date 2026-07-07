@@ -38,7 +38,7 @@ export class AppComponent implements OnInit {
   }
 
   updateToolbarVisibility(url: string): void {
-    this.hideMainToolbar = url.startsWith('/admin') || url.startsWith('/store') || url.startsWith('/customer');
+    this.hideMainToolbar = url.startsWith('/admin') || url.startsWith('/store') || url.startsWith('/customer') || url.startsWith('/courier');
   }
 
   checkLoginStatus(): void {
@@ -49,14 +49,16 @@ export class AppComponent implements OnInit {
   }
 
   goToDashboard(): void {
-    if (this.currentUserRole === 'store_owner') {
-      this.router.navigate(['/store']);
-    } else if (this.currentUserRole === 'admin') {
-      this.router.navigate(['/admin']);
-    } else {
-      this.router.navigate(['/customer']);
-    }
+  if (this.currentUserRole === 'store_owner') {
+    this.router.navigate(['/store']);
+  } else if (this.currentUserRole === 'admin') {
+    this.router.navigate(['/admin']);
+  } else if (this.currentUserRole === 'courier') {
+    this.router.navigate(['/courier']);
+  } else {
+    this.router.navigate(['/customer']);
   }
+}
 
   onLogout(): void {
     this.authService.logout();

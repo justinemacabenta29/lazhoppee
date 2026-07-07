@@ -10,7 +10,7 @@ import { StoreDashboardComponent } from './roles/store-owner/store-dashboard/sto
 import { CustomerDashboardComponent } from './roles/customer/customer-dashboard/customer-dashboard.component';
 import { AdminGuard } from './auth/admin.guard';
 import { AdminLoginComponent } from './auth/admin-login/admin-login.component';
-
+import { CourierDashboardComponent } from './roles/courier/courier-dashboard/courier-dashboard.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/products', pathMatch: 'full' },
@@ -24,6 +24,7 @@ const routes: Routes = [
   { path: 'customer', component: CustomerDashboardComponent },
   { path: 'admin-login', component: AdminLoginComponent },
   { path: 'admin', component: AdminDashboardComponent, canActivate: [AdminGuard] },
+  { path: 'courier', component: CourierDashboardComponent },
   
 ];
 

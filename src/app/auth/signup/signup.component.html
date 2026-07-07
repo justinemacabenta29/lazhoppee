@@ -20,6 +20,10 @@
               (click)="role = 'admin'">
         Admin
       </button>
+      <button [class.active]="role === 'courier'"
+              (click)="role = 'courier'">
+        Courier
+      </button>
     </div>
 
     <div class="form-group">
@@ -46,7 +50,7 @@
     <p class="success" *ngIf="successMsg">{{ successMsg }}</p>
 
     <button mat-raised-button (click)="onSignup()">
-      Sign Up as {{ role === 'store_owner' ? 'Store Owner' : role === 'admin' ? 'Admin' : 'Customer' }}
+      Sign Up as {{ role === 'store_owner' ? 'Store Owner' : role === 'admin' ? 'Admin' : role === 'courier' ? 'Courier' : 'Customer' }}
     </button>
 
     <p class="switch-link">Already have an account? <a routerLink="/login">Login</a></p>

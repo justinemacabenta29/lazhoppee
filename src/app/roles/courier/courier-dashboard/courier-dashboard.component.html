@@ -1,0 +1,85 @@
+<div class="courier-wrapper">
+
+  <div class="sidebar">
+    <div class="sidebar-brand">
+      <h2>LAZSHOPEE</h2>
+      <span>Courier Panel</span>
+    </div>
+    <nav>
+      <button [class.active]="activeTab === 'available'" (click)="activeTab = 'available'">
+        📦 Available Orders
+      </button>
+      <button [class.active]="activeTab === 'deliveries'" (click)="activeTab = 'deliveries'">
+        🚚 My Deliveries
+      </button>
+    </nav>
+  </div>
+
+  <div class="main-content">
+    <div class="topbar">
+      <h2>LAZSHOPEE <span>Courier</span></h2>
+      <button class="logout-btn" (click)="onLogout()">Logout</button>
+    </div>
+
+    <div class="content-body" *ngIf="!loading">
+
+      <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
+
+      <!-- ── AVAILABLE ORDERS ── -->
+      <div *ngIf="activeTab === 'available'">
+        <div class="page-header">
+          <h1>Available Orders</h1>
+          <span class="badge">{{ availableOrders.length }} waiting</span>
+        </div>
+
+        <div class="empty-state" *ngIf="availableOrders.length === 0">
+          <p>No orders waiting for pickup right now.</p>
+        </div>
+
+        <div class="order-card" *ngFor="let order of availableOrders">
+          <div class="order-top">
+            <strong>Order #{{ order._id?.slice(-6) }}</strong>
+            <span class="order-total">₱{{ order.totalPrice }}</span>
+          </div>
+          <p class="order-customer">Customer: {{ order.customer?.name || 'Unknown' }}</p>
+          <div class="order-items-preview">
+            <span *ngFor="let item of order.items">{{ item.name }} × {{ item.qty }}</span>
+          </div>
+          <button class="claim-btn" (click)="claimOrder(order)">Claim Delivery</button>
+        </div>
+      </div>
+
+      <!-- ── MY DELIVERIES ── -->
+      <div *ngIf="activeTab === 'deliveries'">
+        <div class="page-header">
+          <h1>My Deliveries</h1>
+          <span class="badge">{{ myDeliveries.length }} total</span>
+        </div>
+
+        <div class="empty-state" *ngIf="myDeliveries.length === 0">
+          <p>You haven't claimed any deliveries yet.</p>
+        </div>
+
+        <div class="order-card" *ngFor="let order of myDeliveries">
+          <div class="order-top">
+            <strong>Order #{{ order._id?.slice(-6) }}</strong>
+            <span class="status-badge" [ngClass]="order.status">{{ order.status | titlecase }}</span>
+          </div>
+          <p class="order-customer">Customer: {{ order.customer?.name || 'Unknown' }}</p>
+          <div class="order-items-preview">
+            <span *ngFor="let item of order.items">{{ item.name }} × {{ item.qty }}</span>
+          </div>
+          <span class="order-total">₱{{ order.totalPrice }}</span>
+
+          <div class="delivery-actions" *ngIf="order.status === 'in_transit'">
+            <button class="delivered-btn" (click)="markDelivered(order)">✅ Mark Delivered</button>
+            <button class="unsuccessful-btn" (click)="markUnsuccessful(order)">⚠️ Unsuccessful</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="loading-state" *ngIf="loading">Loading orders...</div>
+  </div>
+</div>

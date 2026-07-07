@@ -3,6 +3,7 @@ export interface User {
   name: string;
   email: string;
   password?: string;
-  role: 'admin' | 'customer' | 'store_owner';
+  role: 'admin' | 'customer' | 'store_owner' | 'courier';
   storeApproved?: boolean;
+  active?: boolean;
 }

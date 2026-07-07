@@ -12,9 +12,8 @@ import { Store } from 'src/app/models/store';
 export class AdminDashboardComponent implements OnInit {
   activeTab: string = 'stores';
   stores: Store[] = [];
-  users: any[] = [];
+  allUsers: any[] = [];
 
-  // for assigning categories when approving store (now supports multiple)
   selectedCategories: { [key: string]: string[] } = {};
   categories = ['shoes', 'pants', 'tshirt', 'hoodie', 'accessories'];
 
@@ -34,10 +33,17 @@ export class AdminDashboardComponent implements OnInit {
     this.loadUsers();
   }
 
+  get customers(): any[] {
+    return this.allUsers.filter(u => u.role === 'customer');
+  }
+
+  get storeOwners(): any[] {
+    return this.allUsers.filter(u => u.role === 'store_owner');
+  }
+
   loadStores(): void {
     this.adminService.getAllStores().subscribe(data => {
       this.stores = data;
-      // initialize checkbox state per store
       data.forEach(store => {
         if (store._id) {
           this.selectedCategories[store._id] = [];
@@ -48,7 +54,7 @@ export class AdminDashboardComponent implements OnInit {
 
   loadUsers(): void {
     this.adminService.getAllUsers().subscribe(data => {
-      this.users = data.filter(u => u.role !== 'admin');
+      this.allUsers = data.filter(u => u.role !== 'admin');
     });
   }
 
@@ -86,14 +92,12 @@ export class AdminDashboardComponent implements OnInit {
     }
   }
 
-  approveUser(id: string): void {
-    this.adminService.approveUser(id).subscribe(() => this.loadUsers());
-  }
+  toggleUserStatus(user: any): void {
+    const action = user.active
+      ? this.adminService.deactivateUser(user._id)
+      : this.adminService.activateUser(user._id);
 
-  deactivateUser(id: string): void {
-    if (confirm('Deactivate this account?')) {
-      this.adminService.deactivateUser(id).subscribe(() => this.loadUsers());
-    }
+    action.subscribe(() => this.loadUsers());
   }
 
   deleteUser(id: string): void {

@@ -9,9 +9,10 @@ export interface OrderItem {
 export interface Order {
   _id?: string;
   customer?: any;
+  courier?: any;
   items: OrderItem[];
   totalPrice: number;
-  status?: 'pending' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled';
+  status?: 'pending' | 'confirmed' | 'in_transit' | 'delivered' | 'unsuccessful' | 'cancelled';
   placed?: boolean;
   address?: string;
   createdAt?: string;

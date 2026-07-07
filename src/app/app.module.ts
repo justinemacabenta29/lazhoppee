@@ -15,6 +15,7 @@ import { AdminDashboardComponent } from './roles/admin/admin-dashboard/admin-das
 import { StoreDashboardComponent } from './roles/store-owner/store-dashboard/store-dashboard.component';
 import { CustomerDashboardComponent } from './roles/customer/customer-dashboard/customer-dashboard.component';
 import { FormsModule } from '@angular/forms';
+import { CourierDashboardComponent } from './roles/courier/courier-dashboard/courier-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { FormsModule } from '@angular/forms';
     AdminDashboardComponent,
     StoreDashboardComponent,
     CustomerDashboardComponent,
+    CourierDashboardComponent,
   
   ],
   imports: [

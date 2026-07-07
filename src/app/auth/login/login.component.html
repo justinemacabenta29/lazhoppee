@@ -16,6 +16,10 @@
               (click)="selectedRole = 'store_owner'">
         Store Owner
       </button>
+      <button [class.active]="selectedRole === 'courier'"
+              (click)="selectedRole = 'courier'">
+        Courier
+      </button>
     </div>
 
     <div class="form-group">
@@ -31,7 +35,7 @@
     <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
 
     <button mat-raised-button (click)="onLogin()">
-      Login as {{ selectedRole === 'store_owner' ? 'Store Owner' : selectedRole === 'admin' ? 'Admin' : 'Customer' }}
+      Login as {{ selectedRole === 'store_owner' ? 'Store Owner' : selectedRole === 'admin' ? 'Admin' : selectedRole === 'courier' ? 'Courier' : 'Customer' }}
     </button>
 
     <p class="switch-link">Don't have an account? <a routerLink="/signup">Sign up</a></p>

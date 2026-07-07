@@ -34,7 +34,7 @@ router.patch('/:id', async (req, res) => {
   }
 });
 
-// ✅ APPROVE store owner account
+// ✅ APPROVE store owner account (store-owner specific)
 router.patch('/:id/approve', async (req, res) => {
   try {
     const user = await User.findByIdAndUpdate(
@@ -48,12 +48,26 @@ router.patch('/:id/approve', async (req, res) => {
   }
 });
 
+// ✅ ACTIVATE any account (generic, role-agnostic)
+router.patch('/:id/activate', async (req, res) => {
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      { active: true },
+      { new: true }
+    ).select('-password');
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // ✅ DEACTIVATE account
 router.patch('/:id/deactivate', async (req, res) => {
   try {
     const user = await User.findByIdAndUpdate(
       req.params.id,
-      { active: false, storeApproved: false },
+      { active: false },
       { new: true }
     ).select('-password');
     res.json(user);

@@ -33,8 +33,8 @@ export class AdminService {
     return this.http.get<any[]>(this.userUrl);
   }
 
-  approveUser(id: string): Observable<any> {
-    return this.http.patch(`${this.userUrl}/${id}/approve`, {});
+  activateUser(id: string): Observable<any> {
+    return this.http.patch(`${this.userUrl}/${id}/activate`, {});
   }
 
   deactivateUser(id: string): Observable<any> {

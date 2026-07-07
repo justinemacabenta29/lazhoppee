@@ -102,63 +102,94 @@
       </div>
   
       <!-- ── USER ACCOUNTS ── -->
-      <div *ngIf="activeTab === 'users'">
-        <div class="page-header">
-          <h1>User Accounts</h1>
-          <span class="badge">{{ users.length }} users</span>
-        </div>
-  
-        <div class="empty-state" *ngIf="users.length === 0">
-          <p>No users found.</p>
-        </div>
-  
-        <div class="table-wrap" *ngIf="users.length > 0">
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let user of users">
-                <td><strong>{{ user.name }}</strong></td>
-                <td>{{ user.email }}</td>
-                <td>
-                  <span class="role-badge" [ngClass]="user.role">
-                    {{ user.role === 'store_owner' ? 'Store Owner' : 'Customer' }}
-                  </span>
-                </td>
-                <td>
-                  <span class="status-badge"
-                        [ngClass]="user.active ? 'approved' : 'pending'">
-                    {{ user.active ? 'Active' : 'Inactive' }}
-                  </span>
-                </td>
-                <td class="actions">
-                  <button class="btn-approve"
-                          (click)="approveUser(user._id)"
-                          *ngIf="!user.active">
-                    ✅ Activate
-                  </button>
-                  <button class="btn-reject"
-                          (click)="deactivateUser(user._id)"
-                          *ngIf="user.active">
-                    🚫 Deactivate
-                  </button>
-                  <button class="btn-delete"
-                          (click)="deleteUser(user._id)">
-                    🗑 Delete
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+<div *ngIf="activeTab === 'users'">
+
+  <!-- Customers -->
+  <div class="page-header">
+    <h1>Customers</h1>
+    <span class="badge">{{ customers.length }} users</span>
+  </div>
+
+  <div class="empty-state" *ngIf="customers.length === 0">
+    <p>No customers found.</p>
+  </div>
+
+  <div class="table-wrap" *ngIf="customers.length > 0">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of customers">
+          <td><strong>{{ user.name }}</strong></td>
+          <td>{{ user.email }}</td>
+          <td>
+            <span class="status-badge" [ngClass]="user.active ? 'approved' : 'pending'">
+              {{ user.active ? 'Active' : 'Inactive' }}
+            </span>
+          </td>
+          <td class="actions">
+            <button [class]="user.active ? 'btn-reject' : 'btn-approve'"
+                    (click)="toggleUserStatus(user)">
+              {{ user.active ? '🚫 Deactivate' : '✅ Activate' }}
+            </button>
+            <button class="btn-delete" (click)="deleteUser(user._id)">
+              🗑 Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Store Owners -->
+  <div class="page-header" style="margin-top: 32px;">
+    <h1>Store Owners</h1>
+    <span class="badge">{{ storeOwners.length }} users</span>
+  </div>
+
+  <div class="empty-state" *ngIf="storeOwners.length === 0">
+    <p>No store owners found.</p>
+  </div>
+
+  <div class="table-wrap" *ngIf="storeOwners.length > 0">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of storeOwners">
+          <td><strong>{{ user.name }}</strong></td>
+          <td>{{ user.email }}</td>
+          <td>
+            <span class="status-badge" [ngClass]="user.active ? 'approved' : 'pending'">
+              {{ user.active ? 'Active' : 'Inactive' }}
+            </span>
+          </td>
+          <td class="actions">
+            <button [class]="user.active ? 'btn-reject' : 'btn-approve'"
+                    (click)="toggleUserStatus(user)">
+              {{ user.active ? '🚫 Deactivate' : '✅ Activate' }}
+            </button>
+            <button class="btn-delete" (click)="deleteUser(user._id)">
+              🗑 Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
   
     </div>
-  </div>

@@ -10,8 +10,13 @@ const orderSchema = new mongoose.Schema({
     imageUrl:  { type: String }
   }],
   totalPrice: { type: Number, required: true },
-  status:     { type: String, enum: ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled'], default: 'pending' },
-  placed:     { type: Boolean, default: false }, // false = draft (editable), true = actually placed
+  status:     {
+    type: String,
+    enum: ['pending', 'confirmed', 'in_transit', 'delivered', 'unsuccessful', 'cancelled'],
+    default: 'pending'
+  },
+  placed:     { type: Boolean, default: false },
+  courier:    { type: mongoose.Schema.Types.ObjectId, ref: 'User', default: null },
   address:    { type: String, default: '' },
 }, { timestamps: true });
 

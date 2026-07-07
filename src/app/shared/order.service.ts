@@ -18,6 +18,18 @@ export class OrderService {
     return this.http.get<Order[]>(this.apiUrl);
   }
 
+  getAvailableOrders(): Observable<Order[]> {
+    return this.http.get<Order[]>(`${this.apiUrl}/available`);
+  }
+
+  getCourierOrders(courierId: string): Observable<Order[]> {
+    return this.http.get<Order[]>(`${this.apiUrl}/courier/${courierId}`);
+  }
+
+  claimOrder(orderId: string, courierId: string): Observable<Order> {
+    return this.http.patch<Order>(`${this.apiUrl}/${orderId}/assign`, { courierId });
+  }
+
   create(order: Partial<Order>): Observable<Order> {
     return this.http.post<Order>(this.apiUrl, order);
   }
