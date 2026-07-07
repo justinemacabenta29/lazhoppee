@@ -11,23 +11,23 @@ export class LoginComponent {
   email: string = '';
   password: string = '';
   errorMsg: string = '';
-  selectedRole: string = 'customer'; // default role tab
+  selectedRole: string = 'customer';
 
   constructor(private authService: AuthService, private router: Router) {}
 
   onLogin(): void {
     this.authService.login(this.email, this.password).subscribe({
       next: (user) => {
-        // check if role matches selected tab
         if (user.role !== this.selectedRole) {
           this.errorMsg = `This account is not registered as a ${this.selectedRole.replace('_', ' ')}.`;
           return;
         }
 
-        // redirect based on role
+        // ✅ redirect each role to their own dashboard
         if (user.role === 'admin') this.router.navigate(['/admin']);
         else if (user.role === 'store_owner') this.router.navigate(['/store']);
-        else this.router.navigate(['/products']);
+        else if (user.role === 'courier') this.router.navigate(['/courier']);
+        else this.router.navigate(['/customer']); // ← customer goes to customer dashboard
       },
       error: () => {
         this.errorMsg = 'Invalid email or password';

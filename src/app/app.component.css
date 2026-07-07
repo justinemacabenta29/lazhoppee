@@ -127,3 +127,7 @@ mat-toolbar a:hover {
   width: 18px;
   height: 18px;
 }
+/* Hide hero on product page */
+.container.text-center {
+  display: none;
+}

@@ -15,6 +15,9 @@ export class AppComponent implements OnInit {
   currentUserName: string = '';
   currentUserRole: string = '';
   hideMainToolbar: boolean = false;
+  
+  // ✅ ADDED: Property to track if the user is on a product page
+  isProductPage: boolean = false; 
 
   constructor(
     private cartService: CartService,
@@ -38,7 +41,17 @@ export class AppComponent implements OnInit {
   }
 
   updateToolbarVisibility(url: string): void {
-    this.hideMainToolbar = url.startsWith('/admin') || url.startsWith('/store') || url.startsWith('/customer') || url.startsWith('/courier');
+    this.hideMainToolbar =
+      url.startsWith('/admin') ||
+      url.startsWith('/store') ||
+      url.startsWith('/customer') ||
+      url.startsWith('/courier') ||
+      url.startsWith('/login') ||    // ← hide on login
+      url.startsWith('/signup') ||   // ← hide on signup
+      url === '/';
+
+    // ✅ ADDED: Logic to check if the current URL starts with '/products'
+    this.isProductPage = url.startsWith('/products');
   }
 
   checkLoginStatus(): void {
@@ -49,20 +62,18 @@ export class AppComponent implements OnInit {
   }
 
   goToDashboard(): void {
-  if (this.currentUserRole === 'store_owner') {
-    this.router.navigate(['/store']);
-  } else if (this.currentUserRole === 'admin') {
-    this.router.navigate(['/admin']);
-  } else if (this.currentUserRole === 'courier') {
-    this.router.navigate(['/courier']);
-  } else {
-    this.router.navigate(['/customer']);
+    if (this.currentUserRole === 'store_owner') this.router.navigate(['/store']);
+    else if (this.currentUserRole === 'admin') this.router.navigate(['/admin']);
+    else if (this.currentUserRole === 'courier') this.router.navigate(['/courier']);
+    else this.router.navigate(['/customer']);
   }
-}
 
+  // ✅ FIXED — logout now redirects to /login not /products
   onLogout(): void {
     this.authService.logout();
-    this.checkLoginStatus();
-    this.router.navigate(['/products']);
+    this.isLoggedIn = false;
+    this.currentUserName = '';
+    this.currentUserRole = '';
+    this.router.navigate(['/login']);
   }
 }

@@ -41,6 +41,14 @@ export class AdminDashboardComponent implements OnInit {
     return this.allUsers.filter(u => u.role === 'store_owner');
   }
 
+  get pendingStoresCount(): number {
+    return this.stores.filter(s => !s.approved).length;
+  }
+
+  get activeUsersCount(): number {
+    return this.allUsers.filter(u => u.active).length;
+  }
+
   loadStores(): void {
     this.adminService.getAllStores().subscribe(data => {
       this.stores = data;
@@ -92,12 +100,12 @@ export class AdminDashboardComponent implements OnInit {
     }
   }
 
-  toggleUserStatus(user: any): void {
-    const action = user.active
-      ? this.adminService.deactivateUser(user._id)
-      : this.adminService.activateUser(user._id);
+  activateUser(id: string): void {
+    this.adminService.activateUser(id).subscribe(() => this.loadUsers());
+  }
 
-    action.subscribe(() => this.loadUsers());
+  deactivateUser(id: string): void {
+    this.adminService.deactivateUser(id).subscribe(() => this.loadUsers());
   }
 
   deleteUser(id: string): void {

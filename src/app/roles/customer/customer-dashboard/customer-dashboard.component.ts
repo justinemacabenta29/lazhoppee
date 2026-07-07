@@ -44,6 +44,10 @@ export class CustomerDashboardComponent implements OnInit {
   messagesLoading: boolean = true;
   pendingMessageTargetId: string | null = null;
 
+  get unreadConversationsCount(): number {
+    return this.conversations.filter(c => c.unread).length;
+  }
+
   constructor(
     private authService: AuthService,
     private customerService: CustomerService,
@@ -245,7 +249,6 @@ export class CustomerDashboardComponent implements OnInit {
     if (existing) {
       this.openConversation(existing);
     } else {
-      // no prior conversation — create a placeholder entry so the thread UI opens
       this.activeConversation = {
         otherId: this.pendingMessageTargetId,
         otherName: 'Seller',

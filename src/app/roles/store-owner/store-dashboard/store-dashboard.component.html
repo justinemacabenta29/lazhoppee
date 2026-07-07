@@ -8,15 +8,23 @@
     </div>
     <nav>
       <button [class.active]="activeTab === 'store'" (click)="activeTab = 'store'">
-        🏬 My Store
+        <span class="nav-icon">🏬</span> My Store
       </button>
       <button [class.active]="activeTab === 'products'" (click)="activeTab = 'products'" *ngIf="store">
-        📦 Products
+        <span class="nav-icon">📦</span> Products
+        <span class="nav-badge" *ngIf="pendingProductsCount > 0">{{ pendingProductsCount }}</span>
       </button>
       <button [class.active]="activeTab === 'messages'" (click)="activeTab = 'messages'">
-        💬 Messages
+        <span class="nav-icon">💬</span> Messages
+        <span class="nav-badge" *ngIf="unreadConversationsCount > 0">{{ unreadConversationsCount }}</span>
       </button>
     </nav>
+    <div class="sidebar-footer" *ngIf="store">
+      <span>Store Status</span>
+      <strong [ngClass]="store.approved ? 'approved-text' : 'pending-text'">
+        {{ store.approved ? '✅ Approved' : '⏳ Pending' }}
+      </strong>
+    </div>
   </div>
 
   <!-- Main content -->
@@ -25,82 +33,114 @@
     <div class="topbar">
       <h2>LAZSHOPEE <span>Store</span></h2>
       <div class="topbar-actions">
-        <a routerLink="/products" class="products-link">🛍 View Products</a>
+        <a routerLink="/products" class="products-link">🛍 View Products Page</a>
         <button class="logout-btn" (click)="onLogout()">Logout</button>
       </div>
     </div>
 
     <div class="content-body" *ngIf="!loading">
 
-      <!-- ── MY STORE TAB ── -->
-      <!-- ── MY STORE TAB ── -->
-<div *ngIf="activeTab === 'store'">
-  <div class="page-header">
-    <h1>{{ store ? 'Manage My Store' : 'Create My Store' }}</h1>
-    <span class="status-badge" *ngIf="store" [ngClass]="store.approved ? 'approved' : 'pending'">
-      {{ store.approved ? 'Approved' : 'Pending Approval' }}
-    </span>
-  </div>
-
-  <div class="store-form-layout">
-
-    <!-- Left: form fields -->
-    <div class="form-card">
-      <h3 class="form-title">Store Information</h3>
-
-      <div class="form-group">
-        <label>Store Name</label>
-        <input type="text" [(ngModel)]="name" placeholder="e.g. Justine's Fashion Store">
-      </div>
-
-      <div class="form-group">
-        <label>Description</label>
-        <textarea [(ngModel)]="description" rows="5" placeholder="Tell customers about your store..."></textarea>
-      </div>
-
-      <div class="form-group">
-        <label>Store Image URL</label>
-        <input type="text" [(ngModel)]="imageUrl" placeholder="https://...">
-      </div>
-
-      <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
-      <p class="success" *ngIf="successMsg">{{ successMsg }}</p>
-
-      <button class="save-btn" (click)="saveStore()">
-        {{ store ? 'Save Changes' : 'Create Store' }}
-      </button>
-    </div>
-
-    <!-- Right: live preview card -->
-    <div class="store-preview-card">
-      <div class="preview-image-wrap">
-        <img *ngIf="imageUrl" [src]="imageUrl" alt="Store preview">
-        <div class="preview-placeholder" *ngIf="!imageUrl">
-          <span>🏬</span>
-          <p>No image yet</p>
+      <!-- Stat cards -->
+      <div class="stats-row" *ngIf="store">
+        <div class="stat-card">
+          <div class="stat-icon products">📦</div>
+          <div class="stat-info">
+            <span class="stat-value">{{ products.length }}</span>
+            <span class="stat-label">Total Products</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon approved">✅</div>
+          <div class="stat-info">
+            <span class="stat-value">{{ approvedProductsCount }}</span>
+            <span class="stat-label">Approved</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon pending">⏳</div>
+          <div class="stat-info">
+            <span class="stat-value">{{ pendingProductsCount }}</span>
+            <span class="stat-label">Pending Review</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon messages">💬</div>
+          <div class="stat-info">
+            <span class="stat-value">{{ conversations.length }}</span>
+            <span class="stat-label">Conversations</span>
+          </div>
         </div>
       </div>
-      <div class="preview-info">
-        <h4>{{ name || 'Your Store Name' }}</h4>
-        <p>{{ description || 'Your store description will appear here.' }}</p>
-        <span class="status-badge" *ngIf="store" [ngClass]="store.approved ? 'approved' : 'pending'">
-          {{ store.approved ? 'Approved' : 'Pending Approval' }}
-        </span>
-      </div>
-    </div>
 
-  </div>
-</div>
+      <!-- ── MY STORE TAB ── -->
+      <div *ngIf="activeTab === 'store'">
+        <div class="page-header">
+          <h1>{{ store ? 'Manage My Store' : 'Create My Store' }}</h1>
+          <span class="status-badge" *ngIf="store" [ngClass]="store.approved ? 'approved' : 'pending'">
+            {{ store.approved ? 'Approved' : 'Pending Approval' }}
+          </span>
+        </div>
+
+        <div class="store-form-layout">
+
+          <div class="form-card">
+            <h3 class="form-title">Store Information</h3>
+
+            <div class="form-group">
+              <label>Store Name</label>
+              <input type="text" [(ngModel)]="name" placeholder="e.g. Justine's Fashion Store">
+            </div>
+
+            <div class="form-group">
+              <label>Description</label>
+              <textarea [(ngModel)]="description" rows="5" placeholder="Tell customers about your store..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Store Image URL</label>
+              <input type="text" [(ngModel)]="imageUrl" placeholder="https://...">
+            </div>
+
+            <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
+            <p class="success" *ngIf="successMsg">{{ successMsg }}</p>
+
+            <button class="save-btn" (click)="saveStore()">
+              {{ store ? 'Save Changes' : 'Create Store' }}
+            </button>
+          </div>
+
+          <div class="store-preview-card">
+            <div class="preview-image-wrap">
+              <img *ngIf="imageUrl" [src]="imageUrl" alt="Store preview">
+              <div class="preview-placeholder" *ngIf="!imageUrl">
+                <span>🏬</span>
+                <p>No image yet</p>
+              </div>
+            </div>
+            <div class="preview-info">
+              <h4>{{ name || 'Your Store Name' }}</h4>
+              <p>{{ description || 'Your store description will appear here.' }}</p>
+              <span class="status-badge" *ngIf="store" [ngClass]="store.approved ? 'approved' : 'pending'">
+                {{ store.approved ? 'Approved' : 'Pending Approval' }}
+              </span>
+              <div class="preview-categories" *ngIf="availableCategories.length > 0">
+                <span class="cat-chip" *ngFor="let cat of availableCategories">{{ cat | titlecase }}</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
       <!-- ── PRODUCTS TAB ── -->
       <div *ngIf="activeTab === 'products' && store">
         <div class="page-header">
           <h1>My Products</h1>
           <span class="badge">{{ products.length }} products</span>
           <span class="spacer"></span>
-          <button class="save-btn" (click)="openAddProduct()">+ Add Product</button>
+          <button class="save-btn" (click)="openAddProduct()" *ngIf="availableCategories.length > 0">+ Add Product</button>
         </div>
 
-        <!-- Add/Edit product form -->
         <div class="form-card" *ngIf="showProductForm">
           <h3 class="form-title">{{ editingProduct ? 'Edit Product' : 'New Product' }}</h3>
 
@@ -121,9 +161,6 @@
               <select [(ngModel)]="productCategory" *ngIf="availableCategories.length > 0">
                 <option *ngFor="let cat of availableCategories" [value]="cat">{{ cat | titlecase }}</option>
               </select>
-              <p class="hint" *ngIf="availableCategories.length === 0">
-                ⚠️ No categories assigned yet. Please wait for admin approval before adding products.
-              </p>
             </div>
             <div class="form-group">
               <label>Stock</label>
@@ -153,21 +190,24 @@
           </div>
         </div>
 
-        <!-- Product list -->
+        <p class="hint" *ngIf="availableCategories.length === 0 && !showProductForm">
+          ⚠️ No categories assigned yet. Please wait for admin approval before adding products.
+        </p>
+
         <div class="empty-state" *ngIf="products.length === 0 && !showProductForm">
           <p>No products yet. Click "+ Add Product" to create one.</p>
         </div>
 
         <div class="product-grid" *ngIf="products.length > 0">
           <div class="product-card" *ngFor="let product of products">
-            <img [src]="product.imageUrl || 'https://via.placeholder.com/200'" alt="{{ product.name }}">
+            <div class="product-img-wrap">
+              <img [src]="product.imageUrl || 'https://via.placeholder.com/200'" alt="{{ product.name }}">
+              <span class="status-badge floating" [ngClass]="product.approved ? 'approved' : 'pending'">
+                {{ product.approved ? 'Approved' : 'Pending' }}
+              </span>
+            </div>
             <div class="product-info">
-              <div class="product-top">
-                <strong>{{ product.name }}</strong>
-                <span class="status-badge" [ngClass]="product.approved ? 'approved' : 'pending'">
-                  {{ product.approved ? 'Approved' : 'Pending' }}
-                </span>
-              </div>
+              <strong>{{ product.name }}</strong>
               <span class="cat-tag">{{ product.category | titlecase }}</span>
               <p class="product-desc">{{ product.description || 'No description' }}</p>
               <p class="product-price">₱{{ product.price }}</p>
@@ -180,6 +220,55 @@
         </div>
       </div>
 
+      <!-- ── MESSAGES TAB ── -->
+      <div *ngIf="activeTab === 'messages'" class="messages-layout">
+
+        <div class="conv-list">
+          <div class="conv-list-header">Conversations</div>
+          <div class="empty-state" *ngIf="!messagesLoading && conversations.length === 0">
+            <p>No messages yet.</p>
+          </div>
+          <div class="conv-item"
+               *ngFor="let conv of conversations"
+               [class.active]="activeConversation?.otherId === conv.otherId"
+               (click)="openConversation(conv)">
+            <div class="conv-avatar">{{ conv.otherName.charAt(0) }}</div>
+            <div class="conv-info">
+              <strong>{{ conv.otherName }}</strong>
+              <p>{{ conv.lastMessage }}</p>
+            </div>
+            <span class="unread-dot" *ngIf="conv.unread"></span>
+          </div>
+        </div>
+
+        <div class="conv-thread">
+          <div *ngIf="!activeConversation" class="empty-state thread-empty">
+            <p>Select a conversation to view messages.</p>
+          </div>
+
+          <div *ngIf="activeConversation" class="thread-wrap">
+            <div class="thread-header">
+              <div class="conv-avatar">{{ activeConversation.otherName.charAt(0) }}</div>
+              <strong>{{ activeConversation.otherName }}</strong>
+            </div>
+
+            <div class="thread-messages">
+              <div *ngFor="let msg of threadMessages"
+                   class="thread-bubble"
+                   [class.mine]="(msg.sender._id || msg.sender) === ownerId">
+                {{ msg.content }}
+              </div>
+            </div>
+
+            <div class="thread-input">
+              <input type="text" [(ngModel)]="newMessageText" placeholder="Type a message..." (keyup.enter)="sendMessage()">
+              <button (click)="sendMessage()">Send</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
     </div>
 
     <div class="loading-state" *ngIf="loading">
@@ -187,53 +276,4 @@
     </div>
 
   </div>
-  <!-- ── MESSAGES TAB ── -->
-<div *ngIf="activeTab === 'messages'" class="messages-layout">
-
-  <!-- Conversation list -->
-  <div class="conv-list">
-    <div class="conv-list-header">Conversations</div>
-    <div class="empty-state" *ngIf="!messagesLoading && conversations.length === 0">
-      <p>No messages yet.</p>
-    </div>
-    <div class="conv-item"
-         *ngFor="let conv of conversations"
-         [class.active]="activeConversation?.otherId === conv.otherId"
-         (click)="openConversation(conv)">
-      <div class="conv-avatar">{{ conv.otherName.charAt(0) }}</div>
-      <div class="conv-info">
-        <strong>{{ conv.otherName }}</strong>
-        <p>{{ conv.lastMessage }}</p>
-      </div>
-      <span class="unread-dot" *ngIf="conv.unread"></span>
-    </div>
-  </div>
-
-  <!-- Thread -->
-  <div class="conv-thread">
-    <div *ngIf="!activeConversation" class="empty-state thread-empty">
-      <p>Select a conversation to view messages.</p>
-    </div>
-
-    <div *ngIf="activeConversation" class="thread-wrap">
-      <div class="thread-header">
-        <strong>{{ activeConversation.otherName }}</strong>
-      </div>
-
-      <div class="thread-messages">
-        <div *ngFor="let msg of threadMessages"
-             class="thread-bubble"
-             [class.mine]="(msg.sender._id || msg.sender) === ownerId">
-          {{ msg.content }}
-        </div>
-      </div>
-
-      <div class="thread-input">
-        <input type="text" [(ngModel)]="newMessageText" placeholder="Type a message..." (keyup.enter)="sendMessage()">
-        <button (click)="sendMessage()">Send</button>
-      </div>
-    </div>
-  </div>
-
-</div>
 </div>

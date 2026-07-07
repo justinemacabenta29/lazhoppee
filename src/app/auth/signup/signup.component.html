@@ -1,58 +1,98 @@
-<div class="auth-wrapper">
-  <div class="auth-card">
+<div class="shopee-layout">
 
-    <div class="brand">
-      <h1>LAZSHOPEE</h1>
-      <p>Create your account</p>
+  <div class="auth-split">
+
+    <div class="promo-panel">
+      <div class="promo-content">
+        <div class="promo-logo">LAZSHOPEE</div>
+        <h1 class="promo-title">Join the<br>Community.</h1>
+        <p class="promo-sub">Create an account to start shopping, selling, or delivering.</p>
+        <div class="promo-shapes">
+          <span class="shape shape-1"></span>
+          <span class="shape shape-2"></span>
+          <span class="shape shape-3"></span>
+        </div>
+      </div>
     </div>
 
-    <!-- Role selector tabs -->
-    <div class="role-tabs">
-      <button [class.active]="role === 'customer'"
-              (click)="role = 'customer'">
-        Customer
-      </button>
-      <button [class.active]="role === 'store_owner'"
-              (click)="role = 'store_owner'">
-        Store Owner
-      </button>
-      <button [class.active]="role === 'admin'"
-              (click)="role = 'admin'">
-        Admin
-      </button>
-      <button [class.active]="role === 'courier'"
-              (click)="role = 'courier'">
-        Courier
-      </button>
+    <div class="auth-card-panel">
+      <div class="auth-card">
+
+        <h2 class="card-title">Create Account</h2>
+
+        <div class="role-tabs">
+          <button [class.active]="role === 'customer'" (click)="role = 'customer'">Customer</button>
+          <button [class.active]="role === 'store_owner'" (click)="role = 'store_owner'">Store Owner</button>
+          <button [class.active]="role === 'admin'" (click)="role = 'admin'">Admin</button>
+          <button [class.active]="role === 'courier'" (click)="role = 'courier'">Courier</button>
+        </div>
+
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" [(ngModel)]="name" placeholder="Full Name">
+        </div>
+
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" [(ngModel)]="email" placeholder="Email">
+        </div>
+
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" [(ngModel)]="password" placeholder="Password">
+        </div>
+
+        <div class="notice" *ngIf="role === 'store_owner'">
+          <span>⚠️</span> Store owner accounts require admin approval before you can start selling.
+        </div>
+
+        <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
+        <p class="success" *ngIf="successMsg">{{ successMsg }}</p>
+
+        <button class="login-btn" (click)="onSignup()">
+          Sign Up as {{ role === 'store_owner' ? 'Store Owner' : role === 'admin' ? 'Admin' : role === 'courier' ? 'Courier' : 'Customer' }}
+        </button>
+
+        <p class="switch-link">Already have an account? <a routerLink="/login">Login</a></p>
+      </div>
     </div>
 
-    <div class="form-group">
-      <label>Full Name</label>
-      <input type="text" [(ngModel)]="name" placeholder="Full Name">
-    </div>
-
-    <div class="form-group">
-      <label>Email</label>
-      <input type="email" [(ngModel)]="email" placeholder="Email">
-    </div>
-
-    <div class="form-group">
-      <label>Password</label>
-      <input type="password" [(ngModel)]="password" placeholder="Password">
-    </div>
-
-    <!-- Store owner notice -->
-    <div class="notice" *ngIf="role === 'store_owner'">
-      <span>⚠️</span> Store owner accounts require admin approval before you can start selling.
-    </div>
-
-    <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
-    <p class="success" *ngIf="successMsg">{{ successMsg }}</p>
-
-    <button mat-raised-button (click)="onSignup()">
-      Sign Up as {{ role === 'store_owner' ? 'Store Owner' : role === 'admin' ? 'Admin' : role === 'courier' ? 'Courier' : 'Customer' }}
-    </button>
-
-    <p class="switch-link">Already have an account? <a routerLink="/login">Login</a></p>
   </div>
+
+  <footer class="site-footer">
+    <div class="footer-col">
+      <h4>Customer Service</h4>
+      <a href="#">Help Centre</a>
+      <a href="#">How to Order</a>
+      <a href="#">Returns & Refunds</a>
+      <a href="#">Contact Us</a>
+      
+    </div>
+    <div class="footer-col">
+      <h4>About Lazshopee</h4>
+      <a href="#">About Us</a>
+      <a href="#">Careers</a>
+      <a href="#">Policies</a>
+      <a href="#">Flash Deals</a>
+      <a href="#">Deller Centre</a>
+    </div>
+    <div class="footer-col">
+      <h4>Payment</h4>
+      <div class="payment-badges">
+        <span class="pay-badge">GCash</span>
+        <span class="pay-badge">Cash on Delivery</span>
+        <span class="pay-badge">PayMaya</span>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Follow Us</h4>
+      <a href="#">Facebook</a>
+      <a href="#">Instagram</a>
+    </div>
+    <div class="footer-col">
+      <h4>Lazshopee App</h4>
+      <p class="footer-note">Coming soon on mobile.</p>
+    </div>
+  </footer>
+
 </div>

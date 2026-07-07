@@ -16,7 +16,6 @@ import { Message, Conversation } from 'src/app/models/message';
 export class StoreDashboardComponent implements OnInit {
   activeTab: string = 'store';
 
-  // store fields
   store: Store | null = null;
   loading: boolean = true;
   name: string = '';
@@ -26,11 +25,8 @@ export class StoreDashboardComponent implements OnInit {
   successMsg: string = '';
   ownerId: string = '';
 
-  // product fields
   products: Product[] = [];
-  get availableCategories(): string[] {
-    return this.store?.categories || [];
-  }
+  categories = ['shoes', 'pants', 'tshirt', 'hoodie', 'accessories'];
   showProductForm: boolean = false;
   editingProduct: Product | null = null;
   productName: string = '';
@@ -41,7 +37,6 @@ export class StoreDashboardComponent implements OnInit {
   productStock: number | null = 10;
   productErrorMsg: string = '';
 
-  // messaging fields
   conversations: Conversation[] = [];
   activeConversation: Conversation | null = null;
   threadMessages: Message[] = [];
@@ -65,6 +60,22 @@ export class StoreDashboardComponent implements OnInit {
     this.ownerId = user._id!;
     this.loadMyStore();
     this.loadConversations();
+  }
+
+  get availableCategories(): string[] {
+    return this.store?.categories || [];
+  }
+
+  get approvedProductsCount(): number {
+    return this.products.filter(p => p.approved).length;
+  }
+
+  get pendingProductsCount(): number {
+    return this.products.filter(p => !p.approved).length;
+  }
+
+  get unreadConversationsCount(): number {
+    return this.conversations.filter(c => c.unread).length;
   }
 
   loadMyStore(): void {
@@ -112,7 +123,6 @@ export class StoreDashboardComponent implements OnInit {
     }
   }
 
-  // ── PRODUCTS ──
   loadProducts(): void {
     if (!this.store?._id) return;
     this.productService.getByStore(this.store._id).subscribe({
@@ -125,7 +135,7 @@ export class StoreDashboardComponent implements OnInit {
     this.editingProduct = null;
     this.productName = '';
     this.productPrice = null;
-    this.productCategory = 'shoes';
+    this.productCategory = this.availableCategories[0] || '';
     this.productDescription = '';
     this.productImageUrl = '';
     this.productStock = 10;
@@ -194,7 +204,6 @@ export class StoreDashboardComponent implements OnInit {
     });
   }
 
-  // ── MESSAGES ──
   loadConversations(): void {
     this.messagesLoading = true;
     this.messageService.getInbox(this.ownerId).subscribe({

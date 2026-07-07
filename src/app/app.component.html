@@ -1,22 +1,18 @@
 <mat-toolbar color="primary" *ngIf="!hideMainToolbar">
   <mat-toolbar-row>
-    <a href="/products" mat-button>Products</a>
-    <a href="/cart" mat-button *ngIf="currentUserRole !== 'store_owner'">
-      Cart
-      <span class="cart-badge" *ngIf="cartCount > 0">{{ cartCount }}</span>
-    </a>
-
     <span class="spacer"></span>
 
     <ng-container *ngIf="!isLoggedIn">
       <a href="/login" mat-button>Login</a>
       <a href="/signup" mat-button>Sign Up</a>
-      <a href="/admin-login" mat-button class="admin-btn">Admin Login</a>
     </ng-container>
 
     <ng-container *ngIf="isLoggedIn">
-      <span class="role-badge" [ngClass]="currentUserRole" (click)="goToDashboard()" style="cursor: pointer;">
-        {{ currentUserRole === 'store_owner' ? 'Store Owner' : currentUserRole === 'admin' ? 'Admin' : 'Customer' }}
+      <span class="role-badge" [ngClass]="currentUserRole"
+            (click)="goToDashboard()" style="cursor:pointer;">
+        {{ currentUserRole === 'store_owner' ? 'Store Owner' :
+           currentUserRole === 'admin' ? 'Admin' :
+           currentUserRole === 'courier' ? 'Courier' : 'Customer' }}
       </span>
       <button mat-button (click)="onLogout()">Logout</button>
     </ng-container>
@@ -29,5 +25,4 @@
 </div>
 
 <app-toast></app-toast>
-
 <router-outlet></router-outlet>
