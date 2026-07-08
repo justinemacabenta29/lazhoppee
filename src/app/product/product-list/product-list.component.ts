@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Product } from 'src/app/models/product';
 import { CartService } from 'src/app/cart/cart.service';
 import { ProductService } from '../product.service';
@@ -17,16 +17,28 @@ export class ProductListComponent implements OnInit {
   searchQuery: string = '';
   sortOrder: string = '';
   selectedCategory: string = 'all';
+  cartCount: number = 0; // ← add this
 
   constructor(
     private productService: ProductService,
     private cartService: CartService,
     private toastService: ToastService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
+    // ← subscribe to cart count
+    this.cartService.cartCount$.subscribe(count => {
+      this.cartCount = count;
+    });
+
+    this.route.queryParams.subscribe(params => {
+      if (params['search']) this.searchQuery = params['search'];
+      if (params['sort']) this.sortOrder = params['sort'];
+      this.applyFilters();
+    });
     this.loadProducts();
   }
 
@@ -80,20 +92,17 @@ export class ProductListComponent implements OnInit {
 
   messageSeller(event: Event, product: Product): void {
     event.stopPropagation();
-
     const user = this.authService.getCurrentUser();
     if (!user) {
       this.toastService.show('Please login to message the seller.');
       this.router.navigate(['/login']);
       return;
     }
-
     const ownerId = this.getOwnerId(product);
     if (!ownerId) {
       this.toastService.show('Seller info unavailable for this product.');
       return;
     }
-
     this.router.navigate(['/customer'], {
       queryParams: { tab: 'messages', with: ownerId }
     });

@@ -1,27 +1,72 @@
-<mat-toolbar color="primary" *ngIf="!hideMainToolbar">
-  <mat-toolbar-row>
-    <span class="spacer"></span>
+<div class="site-header" *ngIf="!hideMainToolbar">
 
-    <ng-container *ngIf="!isLoggedIn">
-      <a href="/login" mat-button>Login</a>
-      <a href="/signup" mat-button>Sign Up</a>
-    </ng-container>
-
-    <ng-container *ngIf="isLoggedIn">
-      <span class="role-badge" [ngClass]="currentUserRole"
-            (click)="goToDashboard()" style="cursor:pointer;">
-        {{ currentUserRole === 'store_owner' ? 'Store Owner' :
-           currentUserRole === 'admin' ? 'Admin' :
-           currentUserRole === 'courier' ? 'Courier' : 'Customer' }}
+  <!-- Top utility bar -->
+  <div class="utility-bar">
+    <div class="utility-left">
+      <a href="/store" *ngIf="currentUserRole === 'store_owner'">Seller Centre</a>
+      <a href="/signup" *ngIf="!isLoggedIn">Start Selling</a>
+      <a href="#">Follow us on</a>
+      <span class="social-icons">
+        <a href="#" aria-label="Facebook">📘</a>
+        <a href="#" aria-label="Instagram">📷</a>
       </span>
-      <button mat-button (click)="onLogout()">Logout</button>
-    </ng-container>
-  </mat-toolbar-row>
-</mat-toolbar>
+    </div>
+    <div class="utility-right">
+      <a href="#">🔔 Notifications</a>
+      <a href="#">❓ Help</a>
+      <ng-container *ngIf="!isLoggedIn">
+        <a routerLink="/signup" class="utility-strong">Sign Up</a>
+        <a routerLink="/login" class="utility-strong">Login</a>
+        <a routerLink="/admin-login" class="utility-strong">Admin Login</a>
+      </ng-container>
+      <ng-container *ngIf="isLoggedIn">
+        <span class="welcome-text">Hi, {{ currentUserName }}</span>
+        <span class="role-badge"
+              [ngClass]="currentUserRole"
+              (click)="goToDashboard()">
+          {{ currentUserRole === 'store_owner' ? 'Store Owner' :
+             currentUserRole === 'admin' ? 'Admin' :
+             currentUserRole === 'courier' ? 'Courier' : 'Customer' }}
+        </span>
+        <a class="logout-link" (click)="onLogout()">Logout</a>
+      </ng-container>
+    </div>
+  </div>
 
-<div class="container text-center" *ngIf="!hideMainToolbar">
-  <h1>LAZSHOPEE</h1>
-  <h2>SHOP NOW!</h2>
+  <!-- Main bar -->
+  <div class="main-bar">
+    <a routerLink="/products" class="logo">
+      <span class="logo-mark">L</span>
+      LAZSHOPEE
+    </a>
+
+    <div class="main-search">
+      <input type="text"
+             [(ngModel)]="navSearchQuery"
+             (keyup.enter)="onNavSearch()"
+             placeholder="Search products, brands, and more">
+      <button class="search-btn" (click)="onNavSearch()">🔍</button>
+    </div>
+
+    <select class="nav-sort"
+            [(ngModel)]="navSortOrder"
+            (change)="onNavSortChange()">
+      <option value="">Sort by</option>
+      <option value="asc">Price: Low to High</option>
+      <option value="desc">Price: High to Low</option>
+      <option value="rating">Rating</option>
+    </select>
+
+    <div class="main-actions">
+      <a routerLink="/cart"
+         class="cart-link"
+         *ngIf="currentUserRole !== 'store_owner'">
+        <span class="cart-icon">🛒</span>
+        <span class="cart-badge" *ngIf="cartCount > 0">{{ cartCount }}</span>
+      </a>
+    </div>
+  </div>
+
 </div>
 
 <app-toast></app-toast>

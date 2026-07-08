@@ -11,7 +11,6 @@
   min-height: 720px;
 }
 
-/* Left promo panel */
 .promo-panel {
   flex: 1.2;
   background: linear-gradient(160deg, #3C4A3F 0%, #5c6e5f 100%);
@@ -53,7 +52,6 @@
 .shape-2 { width: 160px; height: 160px; bottom: 40px; left: -40px; background: rgba(169,183,166,0.15); }
 .shape-3 { width: 90px; height: 90px; bottom: 120px; right: 80px; background: rgba(255,255,255,0.08); }
 
-/* Right card panel */
 .auth-card-panel {
   flex: 1;
   background: #f3f5f2;
@@ -124,7 +122,20 @@
 .switch-link { text-align: center; font-size: 13px; color: #888; margin-top: 18px; }
 .switch-link a { color: #3C4A3F; font-weight: 600; text-decoration: none; }
 
-/* Footer */
+.admin-access-row {
+  text-align: center;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid #eee;
+}
+.admin-access-link {
+  font-size: 12px;
+  color: #888;
+  text-decoration: none;
+  font-weight: 600;
+}
+.admin-access-link:hover { color: #3C4A3F; }
+
 .site-footer {
   background: #eef1ec;
   padding: 36px 60px;
@@ -143,13 +154,4 @@
   .auth-split { flex-direction: column; }
   .promo-panel { padding: 40px; min-height: 200px; }
   .site-footer { grid-template-columns: repeat(2, 1fr); }
-}
-.notice {
-  background: #fff8e6;
-  color: #856404;
-  font-size: 12px;
-  padding: 10px 14px;
-  border-radius: 6px;
-  margin-bottom: 16px;
-  text-align: left;
 }

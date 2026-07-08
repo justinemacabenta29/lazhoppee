@@ -6,20 +6,45 @@
     </div>
 
     <div class="detail-info">
-      <h1 class="detail-name">{{ product.name }}</h1>
-      <div class="detail-price">{{ product.price | currency:'PHP' }}</div>
-      <p class="detail-desc">{{ product.description || 'No description available.' }}</p>
+      <span class="store-chip">🏬 {{ getStoreName() }}</span>
 
-      <div class="detail-meta">
-        <span>Stock: {{ product.stock ?? 'Available' }}</span>
-        <span>Category: {{ product.category ?? 'Shoes' }}</span>
+      <h1 class="detail-name">{{ product.name }}</h1>
+
+      <div class="meta-row">
+        <span class="rating" *ngIf="product.rating">⭐ {{ product.rating }}</span>
+        <span class="sold" *ngIf="product.sold">{{ product.sold }} sold</span>
+        <span class="stock">Stock: {{ product.stock ?? 'Available' }}</span>
       </div>
 
-      <button mat-raised-button color="accent"
-              class="add-btn" (click)="addToCart()">
-        <mat-icon>add_shopping_cart</mat-icon>
-        Add to Cart
-      </button>
+      <div class="detail-price">{{ product.price | currency:'PHP' }}</div>
+
+      <p class="detail-desc">{{ product.description || 'No description available.' }}</p>
+
+      <span class="category-tag">{{ product.category }}</span>
+
+      <div class="qty-row">
+        <label>Quantity</label>
+        <div class="qty-control">
+          <button (click)="changeQty(-1)">−</button>
+          <span>{{ quantity }}</span>
+          <button (click)="changeQty(1)">+</button>
+        </div>
+      </div>
+
+      <div class="action-row">
+        <button mat-raised-button color="accent"
+                class="add-btn" (click)="addToCart()">
+          <mat-icon>add_shopping_cart</mat-icon>
+          Add to Cart
+        </button>
+
+        <button mat-stroked-button class="message-btn"
+                *ngIf="getOwnerId()"
+                (click)="messageSeller()">
+          <mat-icon>chat</mat-icon>
+          Message Seller
+        </button>
+      </div>
 
       <button mat-stroked-button class="back-btn"
               (click)="goBack()">

@@ -2,7 +2,6 @@
 
   <div class="auth-split">
 
-    <!-- Left promo panel -->
     <div class="promo-panel">
       <div class="promo-content">
         <div class="promo-logo">LAZSHOPEE</div>
@@ -16,7 +15,6 @@
       </div>
     </div>
 
-    <!-- Right login card -->
     <div class="auth-card-panel">
       <div class="auth-card">
 
@@ -50,10 +48,15 @@
         <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
 
         <button class="login-btn" (click)="onLogin()">
-          Login as {{ selectedRole === 'store_owner' ? 'Store Owner' : selectedRole === 'admin' ? 'Admin' : selectedRole === 'courier' ? 'Courier' : 'Customer' }}
+          Login as {{ selectedRole === 'store_owner' ? 'Store Owner' : selectedRole === 'courier' ? 'Courier' : 'Customer' }}
         </button>
 
         <p class="switch-link">Don't have an account? <a routerLink="/signup">Sign up</a></p>
+
+        <div class="admin-access-row">
+          <a routerLink="/admin-login" class="admin-access-link">🔒 Admin Login</a>
+        </div>
+
       </div>
     </div>
 
@@ -73,15 +76,12 @@
       <a href="#">About Us</a>
       <a href="#">Careers</a>
       <a href="#">Policies</a>
-      <a href="#">Flash Deals</a>
-      <a href="#">Seller Centre</a>
     </div>
     <div class="footer-col">
       <h4>Payment</h4>
       <div class="payment-badges">
         <span class="pay-badge">GCash</span>
         <span class="pay-badge">Cash on Delivery</span>
-        <span class="pay-badge">Pay Maya</span>
       </div>
     </div>
     <div class="footer-col">

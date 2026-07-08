@@ -15,9 +15,8 @@ export class AppComponent implements OnInit {
   currentUserName: string = '';
   currentUserRole: string = '';
   hideMainToolbar: boolean = false;
-  
-  // ✅ ADDED: Property to track if the user is on a product page
-  isProductPage: boolean = false; 
+  navSearchQuery: string = '';
+  navSortOrder: string = '';
 
   constructor(
     private cartService: CartService,
@@ -46,12 +45,10 @@ export class AppComponent implements OnInit {
       url.startsWith('/store') ||
       url.startsWith('/customer') ||
       url.startsWith('/courier') ||
-      url.startsWith('/login') ||    // ← hide on login
-      url.startsWith('/signup') ||   // ← hide on signup
+      url.startsWith('/login') ||
+      url.startsWith('/signup') ||
+      url.startsWith('/admin-login') ||
       url === '/';
-
-    // ✅ ADDED: Logic to check if the current URL starts with '/products'
-    this.isProductPage = url.startsWith('/products');
   }
 
   checkLoginStatus(): void {
@@ -68,12 +65,22 @@ export class AppComponent implements OnInit {
     else this.router.navigate(['/customer']);
   }
 
-  // ✅ FIXED — logout now redirects to /login not /products
+  onNavSearch(): void {
+    const term = this.navSearchQuery.trim();
+    const queryParams: any = {};
+    if (term) queryParams.search = term;
+    if (this.navSortOrder) queryParams.sort = this.navSortOrder;
+    this.router.navigate(['/products'], { queryParams });
+  }
+
+  onNavSortChange(): void {
+    this.onNavSearch();
+  }
+
+  // ✅ FIXED — redirects to /login after logout
   onLogout(): void {
     this.authService.logout();
-    this.isLoggedIn = false;
-    this.currentUserName = '';
-    this.currentUserRole = '';
+    this.checkLoginStatus();
     this.router.navigate(['/login']);
   }
 }

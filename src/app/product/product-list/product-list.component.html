@@ -1,40 +1,53 @@
 <div class="container">
 
-  <!-- Search + Sort bar -->
-  <div class="filter-bar">
-    <div class="search-wrap">
-      <mat-icon>search</mat-icon>
-      <input type="text" [(ngModel)]="searchQuery"
-             (input)="applyFilters()"
-             placeholder="Search products...">
+  <!-- Hero banner -->
+  <div class="hero-banner">
+    <div class="hero-main">
+      <span class="hero-tag">LAZSHOPEE DEALS</span>
+      <h2>Shop Smart,<br>Save More.</h2>
+      <p>Discover quality picks from trusted local sellers.</p>
     </div>
-    <select [(ngModel)]="sortOrder" (change)="applyFilters()">
-      <option value="">Sort by</option>
-      <option value="asc">Price: Low to High</option>
-      <option value="desc">Price: High to Low</option>
-      <option value="rating">Rating</option>
-    </select>
-    
   </div>
 
-  <!-- Category tabs -->
-  <div class="category-tabs">
-    <button [class.active]="selectedCategory === 'all'"
-            (click)="selectCategory('all')">All</button>
-    <button [class.active]="selectedCategory === 'shoes'"
-            (click)="selectCategory('shoes')">👟 Shoes</button>
-    <button [class.active]="selectedCategory === 'pants'"
-            (click)="selectCategory('pants')">👖 Pants</button>
-    <button [class.active]="selectedCategory === 'tshirt'"
-            (click)="selectCategory('tshirt')">👕 T-Shirts</button>
-    <button [class.active]="selectedCategory === 'hoodie'"
-            (click)="selectCategory('hoodie')">🧥 Hoodies</button>
-    <button [class.active]="selectedCategory === 'accessories'"
-            (click)="selectCategory('accessories')">👜 Accessories</button>
+  <!-- Category grid -->
+  <h3>Shop by Category</h3>
+  <div class="category-grid">
+    <button class="cat-card" [class.active]="selectedCategory === 'all'"
+            (click)="selectCategory('all')">
+      <span class="cat-icon">🛍️</span>
+      <span class="cat-name">All</span>
+    </button>
+    <button class="cat-card" [class.active]="selectedCategory === 'shoes'"
+            (click)="selectCategory('shoes')">
+      <span class="cat-icon">👟</span>
+      <span class="cat-name">Shoes</span>
+    </button>
+    <button class="cat-card" [class.active]="selectedCategory === 'pants'"
+            (click)="selectCategory('pants')">
+      <span class="cat-icon">👖</span>
+      <span class="cat-name">Pants</span>
+    </button>
+    <button class="cat-card" [class.active]="selectedCategory === 'tshirt'"
+            (click)="selectCategory('tshirt')">
+      <span class="cat-icon">👕</span>
+      <span class="cat-name">T-Shirts</span>
+    </button>
+    <button class="cat-card" [class.active]="selectedCategory === 'hoodie'"
+            (click)="selectCategory('hoodie')">
+      <span class="cat-icon">🧥</span>
+      <span class="cat-name">Hoodies</span>
+    </button>
+    <button class="cat-card" [class.active]="selectedCategory === 'accessories'"
+            (click)="selectCategory('accessories')">
+      <span class="cat-icon">👜</span>
+      <span class="cat-name">Accessories</span>
+    </button>
   </div>
 
   <h3>
-    {{ selectedCategory === 'all' ? 'Just for you' : selectedCategory === 'tshirt' ? 'T-Shirts' : selectedCategory | titlecase }}
+    {{ selectedCategory === 'all' ? 'Just for you' :
+       selectedCategory === 'tshirt' ? 'T-Shirts' :
+       selectedCategory | titlecase }}
     <span class="product-count">({{ filteredProducts.length }})</span>
   </h3>
 
@@ -44,15 +57,29 @@
     <p>No products found</p>
   </div>
 
+  <!-- Product grid -->
   <div fxLayout="row wrap" fxLayoutGap="10px grid">
     <div *ngFor="let product of filteredProducts">
       <mat-card class="product-card" appearance="outlined"
                 (click)="goToDetail(product._id)">
-        <img mat-card-image [src]="product.imageUrl"
-             alt="{{product.name}}">
+        <div class="img-wrap">
+          <img mat-card-image [src]="product.imageUrl"
+               alt="{{product.name}}">
+          <span class="wishlist-icon">♡</span>
+        </div>
         <mat-card-content>
           <mat-card-title>{{product.name}}</mat-card-title>
-          <mat-card-subtitle>{{product.price | currency: 'PHP'}}</mat-card-subtitle>
+          <mat-card-subtitle>
+            {{product.price | currency: 'PHP'}}
+          </mat-card-subtitle>
+          <div class="meta-row">
+            <span class="rating" *ngIf="product.rating">
+              ⭐ {{ product.rating }}
+            </span>
+            <span class="sold" *ngIf="product.sold">
+              {{ product.sold }} sold
+            </span>
+          </div>
           <span class="category-tag">{{ product.category }}</span>
         </mat-card-content>
         <mat-card-actions>

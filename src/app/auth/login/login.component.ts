@@ -23,11 +23,9 @@ export class LoginComponent {
           return;
         }
 
-        // ✅ redirect each role to their own dashboard
-        if (user.role === 'admin') this.router.navigate(['/admin']);
-        else if (user.role === 'store_owner') this.router.navigate(['/store']);
+        if (user.role === 'store_owner') this.router.navigate(['/store']);
         else if (user.role === 'courier') this.router.navigate(['/courier']);
-        else this.router.navigate(['/customer']); // ← customer goes to customer dashboard
+        else this.router.navigate(['/customer']);
       },
       error: () => {
         this.errorMsg = 'Invalid email or password';
