@@ -63,7 +63,31 @@ nav button.active { background: rgba(255,255,255,0.12); color: #fff; border-left
 }
 .claim-btn:hover { background: #2c3730; }
 
-.delivery-actions { display: flex; gap: 8px; margin-top: 12px; }
+/* ── Destination + live location update ── */
+.destination-info {
+  font-size: 12px;
+  color: #3C4A3F;
+  background: #eaf0e8;
+  padding: 6px 10px;
+  border-radius: 6px;
+  margin-top: 10px;
+  width: fit-content;
+}
+.locate-btn {
+  background: #3C4A3F;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.locate-btn:hover:not(:disabled) { background: #2c3730; }
+.locate-btn:disabled { opacity: 0.6; cursor: default; }
+.location-updated { font-size: 11px; color: #888; }
+
+.delivery-actions { display: flex; align-items: center; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
 .delivered-btn {
   background: #d4edda; color: #155724; border: none; padding: 8px 16px;
   border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer;

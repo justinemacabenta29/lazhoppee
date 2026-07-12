@@ -248,3 +248,172 @@ nav button.active { background: rgba(255,255,255,0.12); color: #fff; border-left
 
 .empty-state { text-align: center; padding: 60px; color: #aaa; background: #fff; border-radius: 10px; border: 0.5px solid #d8ddd5; }
 .loading-state { padding: 60px; text-align: center; color: #aaa; }
+/* ── Order header row ── */
+.order-header-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.order-id-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #222;
+}
+.order-date {
+  font-size: 12px;
+  color: #aaa;
+  margin-left: auto;
+}
+/* ── Tracking timeline ── */
+.tracking-timeline {
+  display: flex;
+  align-items: center;
+  margin: 16px 0 8px;
+  padding: 12px 16px;
+  background: #f9faf8;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+.timeline-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.step-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #d8ddd5;
+  border: 2px solid #d8ddd5;
+  transition: all 0.2s;
+}
+.timeline-step.done .step-dot {
+  background: #3C4A3F;
+  border-color: #3C4A3F;
+}
+.timeline-step.active .step-dot {
+  background: #fff;
+  border-color: #3C4A3F;
+  box-shadow: 0 0 0 3px rgba(60,74,63,0.2);
+}
+.step-label {
+  font-size: 10px;
+  color: #aaa;
+  white-space: nowrap;
+  text-align: center;
+}
+.timeline-step.done .step-label,
+.timeline-step.active .step-label {
+  color: #3C4A3F;
+  font-weight: 600;
+}
+.timeline-line {
+  flex: 1;
+  height: 2px;
+  background: #d8ddd5;
+  min-width: 30px;
+  margin-bottom: 14px;
+}
+/* ── Track button ── */
+.track-btn {
+  background: #cce5ff;
+  color: #004085;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.track-btn:hover { background: #b8daff; }
+/* ── Review section ── */
+.review-section {
+  margin-left: auto;
+  text-align: right;
+}
+.review-done {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+.review-stars { font-size: 14px; }
+.review-label { font-size: 10px; color: #aaa; }
+.review-btn {
+  background: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+  padding: 6px 12px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.review-btn:hover { background: #ffeeba; }
+/* Review form */
+.review-form {
+  background: #f9faf8;
+  border: 1px solid #d8ddd5;
+  border-radius: 8px;
+  padding: 12px;
+  margin-top: 8px;
+  text-align: left;
+  min-width: 240px;
+}
+.star-selector {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+.star-option {
+  font-size: 22px;
+  cursor: pointer;
+  color: #d8ddd5;
+  transition: color 0.1s;
+}
+.star-option.selected { color: #f4a209; }
+.star-option:hover { color: #f4a209; }
+.review-form textarea {
+  width: 100%;
+  border: 1px solid #d8ddd5;
+  border-radius: 6px;
+  padding: 8px;
+  font-size: 13px;
+  resize: vertical;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+.review-form textarea:focus {
+  outline: none;
+  border-color: #3C4A3F;
+}
+.review-form-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+.submit-review-btn {
+  background: #3C4A3F;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.submit-review-btn:hover { background: #2c3730; }
+.cancel-review-btn {
+  background: #f0f2ee;
+  color: #555;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 5px;
+  font-size: 12px;
+  cursor: pointer;
+}

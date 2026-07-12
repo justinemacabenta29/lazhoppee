@@ -45,6 +45,10 @@
           <input type="password" [(ngModel)]="password" placeholder="Password">
         </div>
 
+        <p class="switch-link" style="margin-top: -10px; margin-bottom: 14px; text-align: right;">
+          <a routerLink="/forgot-password">Forgot Password?</a>
+        </p>
+
         <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
 
         <button class="login-btn" (click)="onLogin()">

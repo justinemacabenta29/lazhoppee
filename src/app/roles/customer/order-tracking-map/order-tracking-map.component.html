@@ -1,0 +1,16 @@
+<div class="tracking-wrap">
+    <div [id]="'order-tracking-map-' + orderId" class="tracking-map"></div>
+  
+    <div class="tracking-info" *ngIf="order">
+      <div class="tracking-status">
+        <span class="status-dot" [ngClass]="order.status"></span>
+        <strong>{{ order.status | titlecase }}</strong>
+      </div>
+      <p class="tracking-updated" *ngIf="order.courierLocationUpdatedAt">
+        Last updated: {{ order.courierLocationUpdatedAt | date:'short' }}
+      </p>
+      <p class="tracking-empty" *ngIf="!order.courierLat">
+        Waiting for courier to start sharing location...
+      </p>
+    </div>
+  </div>

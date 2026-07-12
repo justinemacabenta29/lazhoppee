@@ -1,0 +1,41 @@
+<div class="address-form-wrapper">
+
+    <h2>{{ existingAddress ? 'Edit Address' : 'Add New Address' }}</h2>
+  
+    <p class="form-error" *ngIf="errorMsg">{{ errorMsg }}</p>
+  
+    <div class="label-picker">
+      <label>Label this address as:</label>
+      <div class="label-options">
+        <button type="button"
+                [class.selected]="label === 'Home'"
+                (click)="label = 'Home'">🏠 Home</button>
+        <button type="button"
+                [class.selected]="label === 'Work'"
+                (click)="label = 'Work'">💼 Work</button>
+        <button type="button"
+                [class.selected]="label === 'Other'"
+                (click)="label = 'Other'">📍 Other</button>
+      </div>
+  
+      <input type="text"
+             *ngIf="label === 'Other'"
+             class="custom-label-input"
+             [(ngModel)]="customLabel"
+             placeholder="e.g. Mom's House, Office 2...">
+    </div>
+  
+    <app-map-picker
+      [initialLat]="initialLat"
+      [initialLng]="initialLng"
+      (locationPicked)="onLocationPicked($event)">
+    </app-map-picker>
+  
+    <div class="form-actions">
+      <button type="button" class="cancel-btn" (click)="cancel()" [disabled]="saving">Cancel</button>
+      <button type="button" class="save-btn" (click)="save()" [disabled]="saving">
+        {{ saving ? 'Saving...' : 'Save Address' }}
+      </button>
+    </div>
+  
+  </div>

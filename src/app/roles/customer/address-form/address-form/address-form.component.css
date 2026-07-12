@@ -1,0 +1,94 @@
+.address-form-wrapper {
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    max-width: 480px;
+  }
+  
+  .address-form-wrapper h2 {
+    font-size: 18px;
+    color: #222;
+    margin: 0 0 16px;
+  }
+  
+  .form-error {
+    color: #b00020;
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+  
+  .label-picker {
+    margin-bottom: 16px;
+  }
+  
+  .label-picker label {
+    display: block;
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 8px;
+  }
+  
+  .label-options {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  
+  .label-options button {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #d8ddd5;
+    background: #f7f8f6;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  
+  .label-options button.selected {
+    background: #3C4A3F;
+    color: #fff;
+    border-color: #3C4A3F;
+  }
+  
+  .custom-label-input {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid #d8ddd5;
+    border-radius: 6px;
+    font-size: 13px;
+    box-sizing: border-box;
+  }
+  
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 18px;
+  }
+  
+  .cancel-btn {
+    background: none;
+    border: 1px solid #d8ddd5;
+    color: #555;
+    padding: 9px 18px;
+    border-radius: 6px;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  
+  .save-btn {
+    background: #3C4A3F;
+    color: #fff;
+    border: none;
+    padding: 9px 18px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  
+  .save-btn:disabled,
+  .cancel-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }

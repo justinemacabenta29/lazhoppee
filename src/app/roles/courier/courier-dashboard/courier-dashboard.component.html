@@ -71,6 +71,19 @@
           </div>
           <span class="order-total">₱{{ order.totalPrice }}</span>
 
+          <div class="destination-info" *ngIf="order.status === 'in_transit' && order.deliveryLat && order.deliveryLng">
+            🎯 Destination: {{ order.deliveryLat.toFixed(5) }}, {{ order.deliveryLng.toFixed(5) }}
+          </div>
+
+          <div class="delivery-actions" *ngIf="order.status === 'in_transit'">
+            <button class="locate-btn" (click)="updateMyLocation(order)" [disabled]="locatingOrderId === order._id">
+              {{ locatingOrderId === order._id ? 'Updating…' : '📍 Update My Location' }}
+            </button>
+            <span class="location-updated" *ngIf="order.courierLocationUpdatedAt">
+              Last sent: {{ order.courierLocationUpdatedAt | date:'shortTime' }}
+            </span>
+          </div>
+
           <div class="delivery-actions" *ngIf="order.status === 'in_transit'">
             <button class="delivered-btn" (click)="markDelivered(order)">✅ Mark Delivered</button>
             <button class="unsuccessful-btn" (click)="markUnsuccessful(order)">⚠️ Unsuccessful</button>

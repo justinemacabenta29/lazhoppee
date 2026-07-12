@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { forkJoin } from 'rxjs';
 import { Product } from 'src/app/models/product';
 import { CartService } from '../cart.service';
 import { OrderService } from 'src/app/shared/order.service';
@@ -64,23 +65,44 @@ export class CartListComponent implements OnInit {
       return;
     }
 
+    // Group cart items by store — the cart can hold items from multiple
+    // stores, but each Order must belong to exactly one store. So checkout
+    // splits the cart into one draft Order per store.
+    const groups = new Map<string, any[]>();
+    for (const item of this.cartItem as any[]) {
+      const storeId = typeof item.store === 'object' ? item.store?._id : item.store;
+      if (!storeId) continue; // skip items missing a store (shouldn't happen for new items)
+      if (!groups.has(storeId)) groups.set(storeId, []);
+      groups.get(storeId)!.push(item);
+    }
+
+    if (groups.size === 0) {
+      this.checkoutError = 'Unable to determine the store for these items. Please try removing and re-adding them to your cart.';
+      return;
+    }
+
     this.checkoutError = '';
     this.placingOrder = true;
 
-    const orderPayload = {
-      customer: user._id,
-      items: this.cartItem.map((item: any) => ({
-        productId: item._id,
-        name: item.name,
-        price: item.price,
-        qty: item.qty || 1,
-        imageUrl: item.imageUrl || ''
-      })),
-      totalPrice: this.totalPrice,
-      placed: false // draft — customer will review before placing
-    };
+    const orderRequests = Array.from(groups.entries()).map(([storeId, items]) => {
+      const totalPrice = items.reduce((sum, item) => sum + item.price * (item.qty || 1), 0);
+      const payload = {
+        customer: user._id,
+        store: storeId,
+        items: items.map((item: any) => ({
+          productId: item._id,
+          name: item.name,
+          price: item.price,
+          qty: item.qty || 1,
+          imageUrl: item.imageUrl || ''
+        })),
+        totalPrice,
+        placed: false // draft — customer will review before placing
+      };
+      return this.orderService.create(payload);
+    });
 
-    this.orderService.create(orderPayload).subscribe({
+    forkJoin(orderRequests).subscribe({
       next: () => {
         this.cartService.clearCart().subscribe(() => {
           this.placingOrder = false;

@@ -18,6 +18,10 @@ app.use('/stores',   require('./routes/store.routes'));
 app.use('/messages', require('./routes/message.routes'));
 app.use('/orders',   require('./routes/order.routes'));
 app.use('/users',    require('./routes/user.routes'));
+app.use('/addresses', require('./routes/address.routes'));
+app.use('/reviews', require('./routes/review.routes'));
+app.use('/reviews', require('./routes/review.routes'));
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`✅ Server running on http://localhost:${PORT}`));

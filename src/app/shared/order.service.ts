@@ -26,6 +26,14 @@ export class OrderService {
     return this.http.get<Order[]>(`${this.apiUrl}/courier/${courierId}`);
   }
 
+  getStoreOrders(storeId: string): Observable<Order[]> {
+    return this.http.get<Order[]>(`${this.apiUrl}/store/${storeId}`);
+  }
+
+  getById(id: string): Observable<Order> {
+    return this.http.get<Order>(`${this.apiUrl}/${id}`);
+  }
+
   claimOrder(orderId: string, courierId: string): Observable<Order> {
     return this.http.patch<Order>(`${this.apiUrl}/${orderId}/assign`, { courierId });
   }
@@ -42,8 +50,20 @@ export class OrderService {
     return this.http.patch<Order>(`${this.apiUrl}/${id}/place`, {});
   }
 
+  confirmOrder(id: string): Observable<Order> {
+    return this.http.patch<Order>(`${this.apiUrl}/${id}/confirm`, {});
+  }
+
   updateStatus(id: string, status: string): Observable<Order> {
     return this.http.patch<Order>(`${this.apiUrl}/${id}`, { status });
+  }
+
+  updateDeliveryLocation(id: string, lat: number, lng: number): Observable<Order> {
+    return this.http.patch<Order>(`${this.apiUrl}/${id}/delivery-location`, { lat, lng });
+  }
+
+  updateCourierLocation(id: string, lat: number, lng: number): Observable<Order> {
+    return this.http.patch<Order>(`${this.apiUrl}/${id}/courier-location`, { lat, lng });
   }
 
   cancel(id: string): Observable<any> {

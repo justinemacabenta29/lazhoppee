@@ -20,7 +20,6 @@
         <a routerLink="/admin-login" class="utility-strong">Admin Login</a>
       </ng-container>
       <ng-container *ngIf="isLoggedIn">
-        <span class="welcome-text">Hi, {{ currentUserName }}</span>
         <span class="role-badge"
               [ngClass]="currentUserRole"
               (click)="goToDashboard()">
@@ -33,38 +32,47 @@
     </div>
   </div>
 
-  <!-- Main bar -->
-  <div class="main-bar">
-    <a routerLink="/products" class="logo">
-      <span class="logo-mark">L</span>
-      LAZSHOPEE
-    </a>
+  <!-- Hero panel: heading + nav row + subtitle, one solid color -->
+  <div class="hero-panel">
 
-    <div class="main-search">
-      <input type="text"
-             [(ngModel)]="navSearchQuery"
-             (keyup.enter)="onNavSearch()"
-             placeholder="Search products, brands, and more">
-      <button class="search-btn" (click)="onNavSearch()">🔍</button>
-    </div>
+    <h1 class="hero-title">Shop Smart, Save More.</h1>
 
-    <select class="nav-sort"
-            [(ngModel)]="navSortOrder"
-            (change)="onNavSortChange()">
-      <option value="">Sort by</option>
-      <option value="asc">Price: Low to High</option>
-      <option value="desc">Price: High to Low</option>
-      <option value="rating">Rating</option>
-    </select>
-
-    <div class="main-actions">
-      <a routerLink="/cart"
-         class="cart-link"
-         *ngIf="currentUserRole !== 'store_owner'">
-        <span class="cart-icon">🛒</span>
-        <span class="cart-badge" *ngIf="cartCount > 0">{{ cartCount }}</span>
+    <div class="main-bar">
+      <a routerLink="/products" class="logo">
+        <span class="logo-mark">L</span>
+        LAZSHOPEE
       </a>
+
+      <div class="main-search">
+        <input type="text"
+               [(ngModel)]="navSearchQuery"
+               (keyup.enter)="onNavSearch()"
+               placeholder="Search products, brands, and more">
+        <button class="clear-btn" *ngIf="navSearchQuery" (click)="clearNavSearch()" aria-label="Clear search">✕</button>
+        <button class="search-btn" (click)="onNavSearch()">🔍</button>
+      </div>
+
+      <select class="nav-sort"
+              [(ngModel)]="navSortOrder"
+              (change)="onNavSortChange()">
+        <option value="">Sort by</option>
+        <option value="asc">Price: Low to High</option>
+        <option value="desc">Price: High to Low</option>
+        <option value="rating">Rating</option>
+      </select>
+
+      <div class="main-actions">
+        <a routerLink="/cart"
+           class="cart-link"
+           *ngIf="currentUserRole !== 'store_owner'">
+          <span class="cart-icon">🛒</span>
+          <span class="cart-badge" *ngIf="cartCount > 0">{{ cartCount }}</span>
+        </a>
+      </div>
     </div>
+
+    <p class="hero-subtitle">Discover quality picks from trusted local sellers.</p>
+
   </div>
 
 </div>

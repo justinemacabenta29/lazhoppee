@@ -12,20 +12,22 @@ import { CourierDashboardComponent } from './roles/courier/courier-dashboard/cou
 import { AdminLoginComponent } from './auth/admin-login/admin-login.component';
 import { AdminGuard } from './auth/admin.guard';
 import { AuthGuard } from './auth/auth.guard';
+import { ForgotPasswordComponent } from './auth/forgot-password/forgot-password.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/login', pathMatch: 'full' }, // ← redirect to login not products
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignupComponent },
   { path: 'admin-login', component: AdminLoginComponent },
-  { path: 'products', component: ProductListComponent, canActivate: [AuthGuard] },      // ← protected
-  { path: 'products/:id', component: ProductDetailComponent, canActivate: [AuthGuard] }, // ← protected
-  { path: 'cart', component: CartListComponent, canActivate: [AuthGuard] },              // ← protected
+  { path: 'forgot-password', component: ForgotPasswordComponent },
+  { path: 'products', component: ProductListComponent, canActivate: [AuthGuard] },
+  { path: 'products/:id', component: ProductDetailComponent, canActivate: [AuthGuard] },
+  { path: 'cart', component: CartListComponent, canActivate: [AuthGuard] },
   { path: 'admin', component: AdminDashboardComponent, canActivate: [AdminGuard] },
   { path: 'store', component: StoreDashboardComponent, canActivate: [AuthGuard] },
   { path: 'customer', component: CustomerDashboardComponent, canActivate: [AuthGuard] },
   { path: 'courier', component: CourierDashboardComponent, canActivate: [AuthGuard] },
-  { path: '**', redirectTo: '/login' } // ← any unknown route goes to login
+  { path: '**', redirectTo: '/login' }
 ];
 
 @NgModule({

@@ -1,0 +1,25 @@
+<div class="map-picker-wrapper">
+
+    <div class="map-search-row">
+      <input type="text"
+             [(ngModel)]="searchQuery"
+             (keyup.enter)="searchAddress()"
+             placeholder="Search for an address...">
+      <button class="search-btn" (click)="searchAddress()" [disabled]="searching">
+        {{ searching ? '...' : '🔍' }}
+      </button>
+      <button class="locate-btn" (click)="useMyLocation()" [disabled]="locating" title="Use my current location">
+        {{ locating ? '...' : '📍' }}
+      </button>
+    </div>
+  
+    <p class="map-error" *ngIf="searchError">{{ searchError }}</p>
+  
+    <div id="map-picker-container" class="map-container"></div>
+  
+    <div class="resolved-address" *ngIf="resolvedAddress">
+      <strong>Selected location:</strong>
+      <p>{{ resolvedAddress }}</p>
+    </div>
+  
+  </div>

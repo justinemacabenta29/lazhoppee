@@ -39,8 +39,13 @@ export class ProductDetailComponent implements OnInit {
 
   addToCart(): void {
     if (this.product) {
-      this.cartService.addToCart(this.product).subscribe(() => {
-        this.toastService.show(`"${this.product!.name}" added to cart!`);
+      this.cartService.addToCart(this.product).subscribe({
+        next: () => {
+          this.toastService.show(`"${this.product!.name}" added to cart!`);
+        },
+        error: () => {
+          this.toastService.show(`Failed to add "${this.product!.name}" to cart. Please try again.`);
+        }
       });
     }
   }

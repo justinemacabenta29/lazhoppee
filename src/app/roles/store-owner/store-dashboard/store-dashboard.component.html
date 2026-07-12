@@ -14,6 +14,10 @@
         <span class="nav-icon">📦</span> Products
         <span class="nav-badge" *ngIf="pendingProductsCount > 0">{{ pendingProductsCount }}</span>
       </button>
+      <button [class.active]="activeTab === 'orders'" (click)="activeTab = 'orders'" *ngIf="store">
+        <span class="nav-icon">🧾</span> Orders
+        <span class="nav-badge" *ngIf="pendingOrdersCount > 0">{{ pendingOrdersCount }}</span>
+      </button>
       <button [class.active]="activeTab === 'messages'" (click)="activeTab = 'messages'">
         <span class="nav-icon">💬</span> Messages
         <span class="nav-badge" *ngIf="unreadConversationsCount > 0">{{ unreadConversationsCount }}</span>
@@ -218,6 +222,51 @@
             </div>
           </div>
         </div>
+      </div>
+
+      <!-- ── ORDERS TAB (Confirm + Monitor) ── -->
+      <div *ngIf="activeTab === 'orders' && store">
+        <div class="page-header">
+          <h1>Orders</h1>
+          <span class="badge">{{ orders.length }} total</span>
+        </div>
+
+        <p class="error" *ngIf="orderErrorMsg">{{ orderErrorMsg }}</p>
+
+        <div class="loading-state" *ngIf="ordersLoading">Loading orders...</div>
+
+        <div class="empty-state" *ngIf="!ordersLoading && orders.length === 0">
+          <p>No orders yet for your store.</p>
+        </div>
+
+        <table class="orders-table" *ngIf="!ordersLoading && orders.length > 0">
+          <thead>
+            <tr>
+              <th>Order #</th>
+              <th>Customer</th>
+              <th>Items</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of orders">
+              <td>#{{ order._id?.slice(-6) }}</td>
+              <td>{{ order.customer?.name || 'Unknown' }}</td>
+              <td class="items-cell">{{ getOrderItemsSummary(order) }}</td>
+              <td>₱{{ order.totalPrice }}</td>
+              <td>
+                <span class="order-status" [ngClass]="order.status">{{ order.status | titlecase }}</span>
+              </td>
+              <td>
+                <button class="save-qty-btn" *ngIf="order.status === 'pending'" (click)="confirmOrder(order)">
+                  Confirm Order
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
       <!-- ── MESSAGES TAB ── -->

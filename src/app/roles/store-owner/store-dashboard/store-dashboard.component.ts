@@ -4,9 +4,11 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { StoreService } from '../store.service';
 import { ProductService } from '../product.service';
 import { MessageService } from 'src/app/shared/message.service';
+import { OrderService } from 'src/app/shared/order.service';
 import { Store } from 'src/app/models/store';
 import { Product } from 'src/app/models/product';
 import { Message, Conversation } from 'src/app/models/message';
+import { Order } from 'src/app/models/order';
 
 @Component({
   selector: 'app-store-dashboard',
@@ -43,10 +45,16 @@ export class StoreDashboardComponent implements OnInit {
   newMessageText: string = '';
   messagesLoading: boolean = true;
 
+  // orders
+  orders: Order[] = [];
+  ordersLoading: boolean = true;
+  orderErrorMsg: string = '';
+
   constructor(
     private storeService: StoreService,
     private productService: ProductService,
     private messageService: MessageService,
+    private orderService: OrderService,
     private authService: AuthService,
     private router: Router
   ) {}
@@ -78,6 +86,10 @@ export class StoreDashboardComponent implements OnInit {
     return this.conversations.filter(c => c.unread).length;
   }
 
+  get pendingOrdersCount(): number {
+    return this.orders.filter(o => o.status === 'pending').length;
+  }
+
   loadMyStore(): void {
     this.storeService.getMyStore(this.ownerId).subscribe({
       next: (stores) => {
@@ -87,6 +99,7 @@ export class StoreDashboardComponent implements OnInit {
           this.description = this.store.description || '';
           this.imageUrl = this.store.imageUrl || '';
           this.loadProducts();
+          this.loadOrders();
         }
         this.loading = false;
       },
@@ -249,6 +262,33 @@ export class StoreDashboardComponent implements OnInit {
         this.threadMessages.push(msg);
         this.newMessageText = '';
       }
+    });
+  }
+
+  // ── ORDERS (Confirm + Monitor) ──
+  loadOrders(): void {
+    if (!this.store?._id) return;
+    this.ordersLoading = true;
+    this.orderService.getStoreOrders(this.store._id).subscribe({
+      next: (data) => {
+        this.orders = data;
+        this.ordersLoading = false;
+      },
+      error: () => {
+        this.orderErrorMsg = 'Failed to load orders.';
+        this.ordersLoading = false;
+      }
+    });
+  }
+
+  getOrderItemsSummary(order: Order): string {
+    return order.items.map(i => `${i.name} × ${i.qty}`).join(', ');
+  }
+
+  confirmOrder(order: Order): void {
+    this.orderService.updateStatus(order._id!, 'confirmed').subscribe({
+      next: () => this.loadOrders(),
+      error: () => { this.orderErrorMsg = 'Failed to confirm order.'; }
     });
   }
 

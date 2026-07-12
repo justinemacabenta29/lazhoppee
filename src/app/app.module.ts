@@ -16,6 +16,10 @@ import { StoreDashboardComponent } from './roles/store-owner/store-dashboard/sto
 import { CustomerDashboardComponent } from './roles/customer/customer-dashboard/customer-dashboard.component';
 import { FormsModule } from '@angular/forms';
 import { CourierDashboardComponent } from './roles/courier/courier-dashboard/courier-dashboard.component';
+import { MapPickerComponent } from './shared/map-picker/map-picker.component';
+import { AddressFormComponent } from './roles/customer/address-form/address-form/address-form.component';
+import { AddressListComponent } from './roles/customer/address-form/address-list/address-list.component';
+import { OrderTrackingMapComponent } from './roles/customer/order-tracking-map/order-tracking-map.component';
 
 @NgModule({
   declarations: [
@@ -25,6 +29,10 @@ import { CourierDashboardComponent } from './roles/courier/courier-dashboard/cou
     StoreDashboardComponent,
     CustomerDashboardComponent,
     CourierDashboardComponent,
+    MapPickerComponent,
+    AddressFormComponent,
+    AddressListComponent,
+    OrderTrackingMapComponent,
   
   ],
   imports: [

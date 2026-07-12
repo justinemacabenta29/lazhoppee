@@ -1,0 +1,50 @@
+.map-picker-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .map-search-row {
+    display: flex;
+    gap: 8px;
+  }
+  .map-search-row input {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1px solid #d8ddd5;
+    border-radius: 6px;
+    font-size: 13px;
+  }
+  .map-search-row input:focus { outline: none; border-color: #3C4A3F; }
+  
+  .search-btn, .locate-btn {
+    background: #3C4A3F;
+    color: #fff;
+    border: none;
+    padding: 0 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .search-btn:hover, .locate-btn:hover { background: #2c3730; }
+  .search-btn:disabled, .locate-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+  
+  .map-error { color: #b00020; font-size: 12px; margin: 0; }
+  
+  .map-container {
+    width: 100%;
+    height: 320px;
+    border-radius: 8px;
+    border: 1px solid #d8ddd5;
+    z-index: 1;
+  }
+  
+  .resolved-address {
+    background: #eaf0e8;
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+  }
+  .resolved-address strong { display: block; color: #3C4A3F; margin-bottom: 3px; }
+  .resolved-address p { margin: 0; color: #444; }
+  

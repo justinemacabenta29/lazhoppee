@@ -18,6 +18,9 @@ export class CourierDashboardComponent implements OnInit {
   loading: boolean = true;
   errorMsg: string = '';
 
+  // ── Live location update ──
+  locatingOrderId: string | null = null;
+
   constructor(
     private authService: AuthService,
     private orderService: OrderService,
@@ -68,6 +71,42 @@ export class CourierDashboardComponent implements OnInit {
   markUnsuccessful(order: Order): void {
     if (!confirm('Mark this delivery as unsuccessful?')) return;
     this.orderService.updateStatus(order._id!, 'unsuccessful').subscribe(() => this.loadMyDeliveries());
+  }
+
+  // ── Live location update ──
+  updateMyLocation(order: Order): void {
+    if (!order._id) return;
+
+    if (!navigator.geolocation) {
+      this.errorMsg = 'Geolocation is not supported by this browser.';
+      return;
+    }
+
+    this.errorMsg = '';
+    this.locatingOrderId = order._id;
+
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const { latitude, longitude } = pos.coords;
+        this.orderService.updateCourierLocation(order._id!, latitude, longitude).subscribe({
+          next: (updated) => {
+            order.courierLat = updated.courierLat;
+            order.courierLng = updated.courierLng;
+            order.courierLocationUpdatedAt = updated.courierLocationUpdatedAt;
+            this.locatingOrderId = null;
+          },
+          error: () => {
+            this.errorMsg = 'Failed to send your location. Please try again.';
+            this.locatingOrderId = null;
+          }
+        });
+      },
+      () => {
+        this.errorMsg = 'Could not get your location. Please check location permissions.';
+        this.locatingOrderId = null;
+      },
+      { enableHighAccuracy: true, timeout: 8000 }
+    );
   }
 
   onLogout(): void {

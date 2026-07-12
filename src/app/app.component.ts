@@ -77,6 +77,12 @@ export class AppComponent implements OnInit {
     this.onNavSearch();
   }
 
+  // ✅ One-click clear — resets the field and re-runs the search so results reset too
+  clearNavSearch(): void {
+    this.navSearchQuery = '';
+    this.onNavSearch();
+  }
+
   // ✅ FIXED — redirects to /login after logout
   onLogout(): void {
     this.authService.logout();

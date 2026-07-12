@@ -4,9 +4,13 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { CustomerService } from '../customer.service';
 import { OrderService } from 'src/app/shared/order.service';
 import { MessageService } from 'src/app/shared/message.service';
+import { AddressService } from 'src/app/shared/address.service';
+import { ReviewService } from 'src/app/shared/review.service';
 import { User } from 'src/app/models/user';
 import { Order } from 'src/app/models/order';
+import { Review } from 'src/app/models/review';
 import { Message, Conversation } from 'src/app/models/message';
+import { Address } from 'src/app/models/address';
 
 @Component({
   selector: 'app-customer-dashboard',
@@ -35,6 +39,13 @@ export class CustomerDashboardComponent implements OnInit {
   placedOrders: Order[] = [];
   ordersLoading: boolean = true;
   orderErrorMsg: string = '';
+  trackingOrderId: string | null = null;
+
+  // ── REVIEWS ──
+  reviewMap: { [orderId_productId: string]: Review } = {};
+  reviewFormMap: { [key: string]: { rating: number; comment: string; open: boolean } } = {};
+  reviewSuccessMap: { [key: string]: string } = {};
+  reviewErrorMap: { [key: string]: string } = {};
 
   // messaging
   conversations: Conversation[] = [];
@@ -43,6 +54,13 @@ export class CustomerDashboardComponent implements OnInit {
   newMessageText: string = '';
   messagesLoading: boolean = true;
   pendingMessageTargetId: string | null = null;
+
+  // addresses
+  addresses: Address[] = [];
+  addressesLoading: boolean = true;
+  addressErrorMsg: string = '';
+  showAddressForm: boolean = false;
+  editingAddress: Address | null = null;
 
   get unreadConversationsCount(): number {
     return this.conversations.filter(c => c.unread).length;
@@ -53,6 +71,8 @@ export class CustomerDashboardComponent implements OnInit {
     private customerService: CustomerService,
     private orderService: OrderService,
     private messageService: MessageService,
+    private addressService: AddressService,
+    private reviewService: ReviewService,
     private router: Router,
     private route: ActivatedRoute
   ) {}
@@ -67,11 +87,10 @@ export class CustomerDashboardComponent implements OnInit {
     this.loadUser();
     this.loadOrders();
     this.loadConversations();
+    this.loadAddresses();
 
     this.route.queryParams.subscribe(params => {
-      if (params['tab']) {
-        this.activeTab = params['tab'];
-      }
+      if (params['tab']) this.activeTab = params['tab'];
       if (params['with']) {
         this.pendingMessageTargetId = params['with'];
         this.tryOpenPendingConversation();
@@ -94,7 +113,6 @@ export class CustomerDashboardComponent implements OnInit {
   saveAccount(): void {
     this.errorMsg = '';
     this.successMsg = '';
-
     if (!this.name || !this.email) {
       this.errorMsg = 'Name and email are required.';
       return;
@@ -109,7 +127,6 @@ export class CustomerDashboardComponent implements OnInit {
         return;
       }
     }
-
     const payload: Partial<User> = { name: this.name, email: this.email };
     if (this.newPassword) payload.password = this.newPassword;
 
@@ -128,7 +145,7 @@ export class CustomerDashboardComponent implements OnInit {
         setTimeout(() => this.successMsg = '', 3000);
       },
       error: (err) => {
-        this.errorMsg = err.error?.error || 'Failed to update account. Email may already be in use.';
+        this.errorMsg = err.error?.error || 'Failed to update account.';
       }
     });
   }
@@ -147,7 +164,7 @@ export class CustomerDashboardComponent implements OnInit {
     });
   }
 
-  // ── PURCHASES ──
+  // ── ORDERS ──
   loadOrders(): void {
     this.ordersLoading = true;
     this.orderService.getMyOrders(this.userId).subscribe({
@@ -155,6 +172,9 @@ export class CustomerDashboardComponent implements OnInit {
         this.draftOrders = orders.filter(o => !o.placed);
         this.placedOrders = orders.filter(o => o.placed);
         this.ordersLoading = false;
+
+        // load existing reviews for delivered orders
+        this.loadMyReviews();
       },
       error: () => { this.ordersLoading = false; }
     });
@@ -191,7 +211,7 @@ export class CustomerDashboardComponent implements OnInit {
       return;
     }
     this.orderService.placeOrder(order._id!).subscribe({
-      next: () => { this.loadOrders(); },
+      next: () => this.loadOrders(),
       error: () => { this.orderErrorMsg = 'Failed to place order.'; }
     });
   }
@@ -210,19 +230,99 @@ export class CustomerDashboardComponent implements OnInit {
     this.orderService.updateStatus(order._id!, 'cancelled').subscribe(() => this.loadOrders());
   }
 
+  toggleTracking(order: Order): void {
+    this.trackingOrderId = this.trackingOrderId === order._id ? null : order._id!;
+  }
+
+  isStepDone(currentStatus: string, step: string): boolean {
+    const order = ['pending', 'confirmed', 'in_transit', 'delivered'];
+    return order.indexOf(currentStatus) > order.indexOf(step);
+  }
+
+  // ── REVIEWS ──
+  loadMyReviews(): void {
+    this.reviewService.getMyReviews(this.userId).subscribe({
+      next: (reviews) => {
+        reviews.forEach(r => {
+          const key = `${r.order}_${r.product?._id || r.product}`;
+          this.reviewMap[key] = r;
+        });
+      }
+    });
+  }
+
+  reviewKey(order: Order, item: any): string {
+    return `${order._id}_${item.productId}`;
+  }
+
+  hasReviewed(order: Order, item: any): boolean {
+    return !!this.reviewMap[this.reviewKey(order, item)];
+  }
+
+  getReview(order: Order, item: any): Review | null {
+    return this.reviewMap[this.reviewKey(order, item)] || null;
+  }
+
+  openReviewForm(order: Order, item: any): void {
+    const key = this.reviewKey(order, item);
+    this.reviewFormMap[key] = { rating: 5, comment: '', open: true };
+  }
+
+  closeReviewForm(order: Order, item: any): void {
+    const key = this.reviewKey(order, item);
+    delete this.reviewFormMap[key];
+  }
+
+  isReviewFormOpen(order: Order, item: any): boolean {
+    const key = this.reviewKey(order, item);
+    return !!this.reviewFormMap[key]?.open;
+  }
+
+  setReviewRating(order: Order, item: any, rating: number): void {
+    const key = this.reviewKey(order, item);
+    if (this.reviewFormMap[key]) this.reviewFormMap[key].rating = rating;
+  }
+
+  submitReview(order: Order, item: any): void {
+    const key = this.reviewKey(order, item);
+    const form = this.reviewFormMap[key];
+    if (!form) return;
+
+    this.reviewService.submitReview({
+      product: item.productId,
+      customer: this.userId,
+      order: order._id,
+      rating: form.rating,
+      comment: form.comment
+    }).subscribe({
+      next: (review) => {
+        this.reviewMap[key] = review;
+        delete this.reviewFormMap[key];
+        this.reviewSuccessMap[key] = 'Review submitted!';
+        setTimeout(() => delete this.reviewSuccessMap[key], 3000);
+      },
+      error: (err) => {
+        this.reviewErrorMap[key] = err.error?.error || 'Failed to submit review.';
+        setTimeout(() => delete this.reviewErrorMap[key], 4000);
+      }
+    });
+  }
+
+  getStars(rating: number): string[] {
+    return Array.from({ length: 5 }, (_, i) => i < rating ? '⭐' : '☆');
+  }
+
   // ── MESSAGES ──
   loadConversations(): void {
     this.messagesLoading = true;
     this.messageService.getInbox(this.userId).subscribe({
       next: (messages) => {
         const map = new Map<string, Conversation>();
-
         for (const msg of messages) {
           const isSender = (msg.sender._id || msg.sender) === this.userId;
           const other = isSender ? msg.receiver : msg.sender;
           const otherId = other._id || other;
           const otherName = other.name || 'Unknown';
-
           if (!map.has(otherId)) {
             map.set(otherId, {
               otherId,
@@ -233,7 +333,6 @@ export class CustomerDashboardComponent implements OnInit {
             });
           }
         }
-
         this.conversations = Array.from(map.values());
         this.messagesLoading = false;
         this.tryOpenPendingConversation();
@@ -244,7 +343,6 @@ export class CustomerDashboardComponent implements OnInit {
 
   tryOpenPendingConversation(): void {
     if (!this.pendingMessageTargetId) return;
-
     const existing = this.conversations.find(c => c.otherId === this.pendingMessageTargetId);
     if (existing) {
       this.openConversation(existing);
@@ -270,7 +368,6 @@ export class CustomerDashboardComponent implements OnInit {
 
   sendMessage(): void {
     if (!this.newMessageText.trim() || !this.activeConversation) return;
-
     this.messageService.send(this.userId, this.activeConversation.otherId, this.newMessageText).subscribe({
       next: (msg) => {
         this.threadMessages.push(msg);
@@ -280,8 +377,59 @@ export class CustomerDashboardComponent implements OnInit {
     });
   }
 
+  // ── ADDRESSES ──
+  loadAddresses(): void {
+    this.addressesLoading = true;
+    this.addressService.getMyAddresses(this.userId).subscribe({
+      next: (data) => {
+        this.addresses = data;
+        this.addressesLoading = false;
+      },
+      error: () => {
+        this.addressErrorMsg = 'Failed to load your saved addresses.';
+        this.addressesLoading = false;
+      }
+    });
+  }
+
+  openAddAddress(): void {
+    this.editingAddress = null;
+    this.showAddressForm = true;
+  }
+
+  openEditAddress(address: Address): void {
+    this.editingAddress = address;
+    this.showAddressForm = true;
+  }
+
+  onAddressSaved(address: Address): void {
+    this.showAddressForm = false;
+    this.editingAddress = null;
+    this.loadAddresses();
+  }
+
+  onAddressCancelled(): void {
+    this.showAddressForm = false;
+    this.editingAddress = null;
+  }
+
+  deleteAddress(address: Address): void {
+    if (!confirm('Delete this saved address?')) return;
+    this.addressService.delete(address._id!).subscribe({
+      next: () => this.loadAddresses(),
+      error: () => { this.addressErrorMsg = 'Failed to delete address.'; }
+    });
+  }
+
+  setDefaultAddress(address: Address): void {
+    this.addressService.setDefault(address._id!).subscribe({
+      next: () => this.loadAddresses(),
+      error: () => { this.addressErrorMsg = 'Failed to set default address.'; }
+    });
+  }
+
   onLogout(): void {
     this.authService.logout();
-    this.router.navigate(['/products']);
+    this.router.navigate(['/login']);
   }
 }
