@@ -235,9 +235,9 @@ export class CustomerDashboardComponent implements OnInit {
   }
 
   isStepDone(currentStatus: string, step: string): boolean {
-    const order = ['pending', 'confirmed', 'in_transit', 'delivered'];
-    return order.indexOf(currentStatus) > order.indexOf(step);
-  }
+  const order = ['pending', 'confirmed', 'in_transit', 'delivered'];
+  return order.indexOf(currentStatus) >= order.indexOf(step);
+}
 
   // ── REVIEWS ──
   loadMyReviews(): void {

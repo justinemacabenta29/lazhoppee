@@ -6,10 +6,11 @@ const productSchema = new mongoose.Schema({
   imageUrl:    { type: String, default: '' },
   description: { type: String, default: '' },
   category:    { 
-    type: String, 
+                  type: String, 
     enum: ['shoes', 'pants', 'tshirt', 'hoodie', 'accessories'],
     default: 'shoes' 
   },
+  brand:       { type: String, default: '' },
   stock:       { type: Number, default: 10 },
   rating:      { type: Number, default: 4.5 },
   sold:        { type: Number, default: 0 },

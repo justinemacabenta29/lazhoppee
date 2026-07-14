@@ -21,6 +21,11 @@ import { AddressFormComponent } from './roles/customer/address-form/address-form
 import { AddressListComponent } from './roles/customer/address-form/address-list/address-list.component';
 import { OrderTrackingMapComponent } from './roles/customer/order-tracking-map/order-tracking-map.component';
 
+// NgRx
+import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { authReducer } from './store/auth/auth.reducer';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -32,8 +37,7 @@ import { OrderTrackingMapComponent } from './roles/customer/order-tracking-map/o
     MapPickerComponent,
     AddressFormComponent,
     AddressListComponent,
-    OrderTrackingMapComponent,
-  
+    OrderTrackingMapComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +50,17 @@ import { OrderTrackingMapComponent } from './roles/customer/order-tracking-map/o
     MatIconModule,
     CartModule,
     AuthModule,
-    FormsModule
+    FormsModule,
+
+    // NgRx Store
+    StoreModule.forRoot({
+      auth: authReducer
+    }),
+
+    // NgRx Redux DevTools
+    StoreDevtoolsModule.instrument({
+      maxAge: 25
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]

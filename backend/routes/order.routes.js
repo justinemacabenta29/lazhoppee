@@ -129,13 +129,14 @@ router.patch('/:id/place', async (req, res) => {
 });
 
 // ── Store Owner confirms a pending order ──
+// ── Store Owner confirms a pending order ──
 router.patch('/:id/confirm', async (req, res) => {
   console.log('PATCH /orders/' + req.params.id + '/confirm');
   try {
     const order = await Order.findOneAndUpdate(
       { _id: req.params.id, status: 'pending' },
       { status: 'confirmed' },
-      { new: true }
+      { returnDocument: 'after' }  // ← changed
     );
     if (!order) return res.status(409).json({ error: 'Order is not in a pending state.' });
     res.json(order);
@@ -152,7 +153,7 @@ router.patch('/:id/assign', async (req, res) => {
     const order = await Order.findOneAndUpdate(
       { _id: req.params.id, courier: null },
       { courier: req.body.courierId, status: 'in_transit' },
-      { new: true }
+      { returnDocument: 'after' }  // ← changed
     );
     if (!order) return res.status(409).json({ error: 'This order was already claimed by another courier.' });
     res.json(order);

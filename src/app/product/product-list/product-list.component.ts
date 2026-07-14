@@ -17,6 +17,7 @@ export class ProductListComponent implements OnInit {
   searchQuery: string = '';
   sortOrder: string = '';
   selectedCategory: string = 'all';
+  brandFilter: string = '';
 
   constructor(
     private productService: ProductService,

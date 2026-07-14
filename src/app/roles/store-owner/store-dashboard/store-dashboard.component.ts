@@ -10,6 +10,8 @@ import { Product } from 'src/app/models/product';
 import { Message, Conversation } from 'src/app/models/message';
 import { Order } from 'src/app/models/order';
 
+
+
 @Component({
   selector: 'app-store-dashboard',
   templateUrl: './store-dashboard.component.html',
@@ -22,6 +24,7 @@ export class StoreDashboardComponent implements OnInit {
   loading: boolean = true;
   name: string = '';
   description: string = '';
+  brand: string = '';
   imageUrl: string = '';
   errorMsg: string = '';
   successMsg: string = '';
@@ -35,6 +38,7 @@ export class StoreDashboardComponent implements OnInit {
   productPrice: number | null = null;
   productCategory: string = 'shoes';
   productDescription: string = '';
+  productBrand: string = '';
   productImageUrl: string = '';
   productStock: number | null = 10;
   productErrorMsg: string = '';
@@ -97,6 +101,7 @@ export class StoreDashboardComponent implements OnInit {
         if (this.store) {
           this.name = this.store.name;
           this.description = this.store.description || '';
+          this
           this.imageUrl = this.store.imageUrl || '';
           this.loadProducts();
           this.loadOrders();
@@ -113,7 +118,7 @@ export class StoreDashboardComponent implements OnInit {
       return;
     }
     this.errorMsg = '';
-    const payload = { name: this.name, description: this.description, imageUrl: this.imageUrl, owner: this.ownerId };
+    const payload = { name: this.name, description: this.description, brand: this.brand, imageUrl: this.imageUrl, owner: this.ownerId };
 
     if (this.store) {
       this.storeService.updateStore(this.store._id!, payload).subscribe({
@@ -147,6 +152,7 @@ export class StoreDashboardComponent implements OnInit {
   openAddProduct(): void {
     this.editingProduct = null;
     this.productName = '';
+    this.productBrand = '';
     this.productPrice = null;
     this.productCategory = this.availableCategories[0] || '';
     this.productDescription = '';
@@ -159,6 +165,7 @@ export class StoreDashboardComponent implements OnInit {
   openEditProduct(product: Product): void {
     this.editingProduct = product;
     this.productName = product.name;
+    this.productBrand = product.brand || '';
     this.productPrice = product.price;
     this.productCategory = product.category || 'shoes';
     this.productDescription = product.description || '';
@@ -182,6 +189,7 @@ export class StoreDashboardComponent implements OnInit {
 
     const payload: Partial<Product> = {
       name: this.productName,
+      brand: this.productBrand,
       price: this.productPrice,
       category: this.productCategory,
       description: this.productDescription,

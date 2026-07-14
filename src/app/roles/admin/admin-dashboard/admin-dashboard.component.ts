@@ -7,7 +7,8 @@ import { Store } from 'src/app/models/store';
 @Component({
   selector: 'app-admin-dashboard',
   templateUrl: './admin-dashboard.component.html',
-  styleUrls: ['./admin-dashboard.component.css']
+  styleUrls: ['./admin-dashboard.component.css'],
+ 
 })
 export class AdminDashboardComponent implements OnInit {
   activeTab: string = 'stores';
@@ -33,21 +34,26 @@ export class AdminDashboardComponent implements OnInit {
     this.loadUsers();
   }
 
-  get customers(): any[] {
-    return this.allUsers.filter(u => u.role === 'customer');
-  }
+ get customers(): any[] {
+  return this.allUsers.filter(u => u.role === 'customer');
+}
 
-  get storeOwners(): any[] {
-    return this.allUsers.filter(u => u.role === 'store_owner');
-  }
+get storeOwners(): any[] {
+  return this.allUsers.filter(u => u.role === 'store_owner');
+}
 
-  get pendingStoresCount(): number {
-    return this.stores.filter(s => !s.approved).length;
-  }
+// ── ADD THESE 3 ──
+get pendingStoresCount(): number {
+  return this.stores.filter(s => !s.approved).length;
+}
 
-  get activeUsersCount(): number {
-    return this.allUsers.filter(u => u.active).length;
-  }
+get totalUsersCount(): number {
+  return this.allUsers.length;
+}
+
+get activeUsersCount(): number {
+  return this.allUsers.filter(u => u.active).length;
+}
 
   loadStores(): void {
     this.adminService.getAllStores().subscribe(data => {

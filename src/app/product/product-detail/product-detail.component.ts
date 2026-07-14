@@ -64,6 +64,7 @@ export class ProductDetailComponent implements OnInit {
     return 'Unknown Store';
   }
 
+
   messageSeller(): void {
     const user = this.authService.getCurrentUser();
     if (!user) {

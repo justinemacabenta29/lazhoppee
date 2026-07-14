@@ -5,32 +5,32 @@
   <div class="category-grid">
     <button class="cat-card" [class.active]="selectedCategory === 'all'"
             (click)="selectCategory('all')">
-      <span class="cat-icon">🛍️</span>
+      <span class="cat-icon"></span>
       <span class="cat-name">All</span>
     </button>
     <button class="cat-card" [class.active]="selectedCategory === 'shoes'"
             (click)="selectCategory('shoes')">
-      <span class="cat-icon">👟</span>
+      <span class="cat-icon"></span>
       <span class="cat-name">Shoes</span>
     </button>
     <button class="cat-card" [class.active]="selectedCategory === 'pants'"
             (click)="selectCategory('pants')">
-      <span class="cat-icon">👖</span>
+      <span class="cat-icon"></span>
       <span class="cat-name">Pants</span>
     </button>
     <button class="cat-card" [class.active]="selectedCategory === 'tshirt'"
             (click)="selectCategory('tshirt')">
-      <span class="cat-icon">👕</span>
+      <span class="cat-icon"></span>
       <span class="cat-name">T-Shirts</span>
     </button>
     <button class="cat-card" [class.active]="selectedCategory === 'hoodie'"
             (click)="selectCategory('hoodie')">
-      <span class="cat-icon">🧥</span>
+      <span class="cat-icon"></span>
       <span class="cat-name">Hoodies</span>
     </button>
     <button class="cat-card" [class.active]="selectedCategory === 'accessories'"
             (click)="selectCategory('accessories')">
-      <span class="cat-icon">👜</span>
+      <span class="cat-icon"></span>
       <span class="cat-name">Accessories</span>
     </button>
   </div>
@@ -65,7 +65,7 @@
           </mat-card-subtitle>
           <div class="meta-row">
             <span class="rating" *ngIf="product.rating">
-              ⭐ {{ product.rating }}
+               {{ product.rating }}
             </span>
             <span class="sold" *ngIf="product.sold">
               {{ product.sold }} sold

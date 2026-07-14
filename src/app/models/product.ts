@@ -5,6 +5,7 @@ export interface Product {
   imageUrl?: string;
   description?: string;
   category?: 'shoes' | 'pants' | 'tshirt' | 'hoodie' | 'accessories' | 'all' | string;
+  brand?: string;
   stock?: number;
   rating?: number;
   sold?: number;
